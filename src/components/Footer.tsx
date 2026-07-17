@@ -6,9 +6,9 @@ import { toast } from "sonner";
 export function Footer() {
   const [email, setEmail] = useState("");
   return (
-    <footer className="relative bg-[color:var(--forest-deep)] text-white/85 pt-24 pb-10 overflow-hidden">
-      <div className="container-lodge relative z-10 grid gap-12 md:grid-cols-4">
-        <div>
+    <footer className="relative bg-[color:var(--forest-deep)] text-white/85 pt-16 md:pt-24 pb-10 overflow-hidden">
+      <div className="container-lodge relative z-10 grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4 md:gap-12">
+        <div className="col-span-2 md:col-span-1">
           <div className="font-display text-3xl">
             <span className="text-[color:var(--trail-green)] italic">Urban</span>
             <span className="text-white">Way</span>
@@ -30,7 +30,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div>
+        <div className="col-span-1">
           <p className="eyebrow text-[color:var(--trail-green)] mb-4">Explore</p>
           <ul className="space-y-3 text-sm">
             {[
@@ -47,7 +47,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div>
+        <div className="col-span-1">
           <p className="eyebrow text-[color:var(--trail-green)] mb-4">Services</p>
           <ul className="space-y-3 text-sm text-white/70">
             <li>Wildlife Safaris</li>
@@ -58,7 +58,7 @@ export function Footer() {
           </ul>
         </div>
 
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <p className="eyebrow text-[color:var(--trail-green)] mb-4">Contact</p>
           <ul className="space-y-3 text-sm text-white/70">
             <li>Arusha, Tanzania</li>
@@ -74,7 +74,7 @@ export function Footer() {
               toast.success("Karibu! You are on the list.");
               setEmail("");
             }}
-            className="mt-6 flex items-center gap-2 border-b border-white/25 pb-2"
+            className="mt-6 flex items-center gap-2 border-b border-white/25 pb-2 max-w-sm"
           >
             <input
               type="email"
@@ -103,7 +103,7 @@ export function Footer() {
         UrbanWay
       </div>
 
-      <div className="container-lodge relative z-10 mt-24 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-white/50">
+      <div className="container-lodge relative z-10 mt-16 md:mt-24 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-4 text-xs text-white/50 text-center sm:text-left">
         <p>© {new Date().getFullYear()} UrbanWay Tours & Safari. All rights reserved.</p>
         <p>Handcrafted in Arusha, Tanzania.</p>
       </div>

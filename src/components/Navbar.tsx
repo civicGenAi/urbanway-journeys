@@ -68,10 +68,21 @@ export function Navbar() {
 
           <button
             aria-label="Toggle menu"
-            className={`md:hidden p-2 ${textColor}`}
+            className={`md:hidden relative h-10 w-10 ${textColor}`}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={open ? "x" : "menu"}
+                initial={{ opacity: 0, rotate: -90, scale: 0.5 }}
+                animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                exit={{ opacity: 0, rotate: 90, scale: 0.5 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </motion.span>
+            </AnimatePresence>
           </button>
         </div>
       </header>
@@ -79,19 +90,31 @@ export function Navbar() {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-40 bg-[color:var(--forest-deep)] md:hidden flex flex-col justify-center px-8"
+            initial={{ clipPath: "circle(0% at calc(100% - 2.75rem) 2.75rem)" }}
+            animate={{ clipPath: "circle(150% at calc(100% - 2.75rem) 2.75rem)" }}
+            exit={{ clipPath: "circle(0% at calc(100% - 2.75rem) 2.75rem)" }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              background:
+                "radial-gradient(circle at calc(100% - 2.75rem) 2.75rem, var(--trail-green) 0%, var(--forest-deep) 60%)",
+            }}
+            className="fixed inset-0 z-40 md:hidden flex flex-col justify-center px-8 overflow-hidden"
           >
-            <ul className="space-y-6">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -bottom-8 -right-6 font-display font-semibold leading-none select-none text-[32vw]"
+              style={{ color: "transparent", WebkitTextStroke: "1px rgba(255,255,255,0.07)" }}
+            >
+              Way
+            </div>
+
+            <ul className="relative space-y-6">
               {links.map((l, i) => (
                 <motion.li
                   key={l.to}
                   initial={{ y: 40, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.1 + i * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: 0.3 + i * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link to={l.to} className="font-display text-white text-5xl">
                     {l.label}
@@ -99,11 +122,16 @@ export function Navbar() {
                 </motion.li>
               ))}
             </ul>
-            <div className="mt-16 text-white/70 text-sm space-y-2">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 + links.length * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="relative mt-16 text-white/70 text-sm space-y-2"
+            >
               <p>Arusha, Tanzania</p>
               <p>hello@urbanwaytours.co.tz</p>
               <p>WhatsApp: +255 000 000 000</p>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

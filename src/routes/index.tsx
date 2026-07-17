@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import { ArrowUpRight, Play, Star } from "lucide-react";
 import { IMAGES } from "../lib/images";
 import { Reveal, RevealStagger, RevealChild, SplitHeading } from "../components/Reveal";
@@ -61,6 +61,86 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   return <span ref={ref}>{n}{suffix}</span>;
 }
 
+const HERO_HEADLINES = [
+  { text: "Your Trusted Gateway to Tanzania", italicWord: "Tanzania" },
+  { text: "Handcrafted Journeys Into the Wild", italicWord: "Wild" },
+  { text: "Where the City Meets Kilimanjaro", italicWord: "Kilimanjaro" },
+];
+
+function HeroHeadline() {
+  const [i, setI] = useState(0);
+  const [cycles, setCycles] = useState(0);
+  useEffect(() => {
+    if (cycles >= 3) return;
+    const t = setTimeout(() => {
+      setI((x) => (x + 1) % HERO_HEADLINES.length);
+      setCycles((c) => c + 1);
+    }, 4200);
+    return () => clearTimeout(t);
+  }, [cycles]);
+
+  const h = HERO_HEADLINES[i];
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div key={i} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
+        <SplitHeading
+          as="h1"
+          className="display-hero text-white mt-4 max-w-5xl !text-white"
+          text={h.text}
+          italicWord={h.italicWord}
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+const HERO_STATS = [
+  { n: 5, s: "+", label: "Years of Experience" },
+  { n: 15, s: "+", label: "Destinations" },
+  { n: 1200, s: "+", label: "Happy Travelers" },
+  { n: 8, s: "", label: "Safari Vehicles" },
+];
+
+function HeroStatCarousel() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((x) => (x + 1) % HERO_STATS.length), 2800);
+    return () => clearInterval(t);
+  }, []);
+  const s = HERO_STATS[i];
+  return (
+    <div className="md:hidden">
+      <div className="relative h-16 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -18 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute inset-0"
+          >
+            <p className="font-display text-3xl text-white">
+              <Counter to={s.n} suffix={s.s} />
+            </p>
+            <p className="text-xs uppercase tracking-widest text-white/60 mt-1">{s.label}</p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <div className="mt-4 flex gap-1.5">
+        {HERO_STATS.map((_, k) => (
+          <span
+            key={k}
+            className={`h-1 rounded-full transition-all duration-700 ${
+              k === i ? "w-7 bg-[color:var(--trail-green)]" : "w-1.5 bg-white/25"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -84,14 +164,9 @@ function Hero() {
           Tanzania, from the city to the wild
         </motion.p>
 
-        <SplitHeading
-          as="h1"
-          className="display-hero text-white mt-4 max-w-5xl !text-white"
-          text="Your Trusted Gateway to Tanzania"
-          italicWord="Tanzania"
-        />
+        <HeroHeadline />
 
-        <Reveal delay={0.4} className="mt-8 max-w-xl text-white/85 text-lg leading-relaxed">
+        <Reveal delay={0.4} className="hidden md:block mt-8 max-w-xl text-white/85 text-lg leading-relaxed">
           Handcrafted safaris, seamless transfers and cultural journeys, led by Tanzanian hosts who call this landscape home.
         </Reveal>
 
@@ -104,20 +179,18 @@ function Hero() {
           </button>
         </Reveal>
 
-        <div className="mt-16 flex flex-wrap gap-x-12 gap-y-6 border-t border-white/20 pt-8">
-          {[
-            { n: 5, s: "+", label: "Years of Experience" },
-            { n: 15, s: "+", label: "Destinations" },
-            { n: 1200, s: "+", label: "Happy Travelers" },
-            { n: 8, s: "", label: "Safari Vehicles" },
-          ].map((s, i) => (
-            <div key={i}>
-              <p className="font-display text-3xl md:text-4xl text-white">
-                <Counter to={s.n} suffix={s.s} />
-              </p>
-              <p className="text-xs uppercase tracking-widest text-white/60 mt-1">{s.label}</p>
-            </div>
-          ))}
+        <div className="mt-16 border-t border-white/20 pt-8">
+          <div className="hidden md:flex flex-wrap gap-x-12 gap-y-6">
+            {HERO_STATS.map((s, i) => (
+              <div key={i}>
+                <p className="font-display text-3xl md:text-4xl text-white">
+                  <Counter to={s.n} suffix={s.s} />
+                </p>
+                <p className="text-xs uppercase tracking-widest text-white/60 mt-1">{s.label}</p>
+              </div>
+            ))}
+          </div>
+          <HeroStatCarousel />
         </div>
       </div>
 
@@ -326,13 +399,31 @@ function WhyUs() {
   );
 }
 
+function TestimonialCard({ q }: { q: { text: string; who: string; trip: string } }) {
+  return (
+    <>
+      <div className="flex gap-1 text-[color:var(--sunrise-gold)]">
+        {Array.from({ length: 5 }).map((_, k) => (
+          <Star key={k} className="h-4 w-4 fill-current" />
+        ))}
+      </div>
+      <p className="font-display text-2xl md:text-3xl leading-snug mt-6">"{q.text}"</p>
+      <div className="mt-8 flex justify-between text-sm text-[color:var(--charcoal)]/60">
+        <span>{q.who}</span>
+        <span className="uppercase tracking-widest text-xs">{q.trip}</span>
+      </div>
+    </>
+  );
+}
+
 function TestimonialsPreview() {
   const quotes = [
     { text: "The most seamless safari we've ever taken. Our guide Emmanuel knew every bird call by name.", who: "Anja & Peter, Germany", trip: "Serengeti 5-day" },
     { text: "Picked up at JRO at midnight, greeted with cold water and a warm smile. Set the tone for the whole trip.", who: "Marcus, USA", trip: "JRO airport pickup" },
   ];
+  const track = [...quotes, ...quotes];
   return (
-    <section className="py-28 md:py-40 bg-[color:var(--kilimanjaro-snow)]">
+    <section className="py-28 md:py-40 bg-[color:var(--kilimanjaro-snow)] overflow-hidden">
       <div className="container-lodge">
         <div className="flex justify-between items-end mb-14">
           <div>
@@ -341,22 +432,26 @@ function TestimonialsPreview() {
           </div>
           <Link to="/reviews" className="link-slide text-[color:var(--forest-deep)] font-semibold">All reviews →</Link>
         </div>
-        <RevealStagger className="grid gap-6 md:grid-cols-2">
+
+        {/* Desktop / tablet: static side-by-side grid */}
+        <RevealStagger className="hidden md:grid gap-6 md:grid-cols-2">
           {quotes.map((q, i) => (
             <RevealChild key={i} className="bg-white p-10 md:p-12 rounded-2xl shadow-[0_20px_60px_rgba(23,24,26,0.08)]">
-              <div className="flex gap-1 text-[color:var(--sunrise-gold)]">
-                {Array.from({ length: 5 }).map((_, k) => (
-                  <Star key={k} className="h-4 w-4 fill-current" />
-                ))}
-              </div>
-              <p className="font-display text-2xl md:text-3xl leading-snug mt-6">"{q.text}"</p>
-              <div className="mt-8 flex justify-between text-sm text-[color:var(--charcoal)]/60">
-                <span>{q.who}</span>
-                <span className="uppercase tracking-widest text-xs">{q.trip}</span>
-              </div>
+              <TestimonialCard q={q} />
             </RevealChild>
           ))}
         </RevealStagger>
+      </div>
+
+      {/* Mobile: one continuous line, drifting slowly left to right */}
+      <div className="md:hidden mt-2 -mx-5">
+        <div className="flex gap-6 w-max px-5 marquee-track-reverse">
+          {track.map((q, i) => (
+            <div key={i} className="w-[82vw] shrink-0 bg-white p-8 rounded-2xl shadow-[0_20px_60px_rgba(23,24,26,0.08)]">
+              <TestimonialCard q={q} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

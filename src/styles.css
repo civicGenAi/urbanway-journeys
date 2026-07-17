@@ -248,6 +248,11 @@
   &:hover { animation-play-state: paused; }
 }
 
+@utility marquee-track-reverse {
+  animation: marquee 32s linear infinite reverse;
+  &:hover { animation-play-state: paused; }
+}
+
 @keyframes draw-line {
   from { stroke-dashoffset: var(--dash); }
   to { stroke-dashoffset: 0; }
