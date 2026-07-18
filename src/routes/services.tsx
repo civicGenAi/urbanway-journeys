@@ -157,13 +157,24 @@ function Services() {
                       ))}
                     </ul>
                     <Reveal delay={0.5} className="mt-10">
-                      <button
-                        onClick={() => { setSent(false); setModal(s.title); }}
-                        className="btn-primary"
-                        data-cursor="Book"
-                      >
-                        Request This Service <ArrowUpRight className="h-4 w-4" />
-                      </button>
+                      {s.catalog ? (
+                        <Link
+                          to="/services/$category"
+                          params={{ category: s.catalog }}
+                          className="btn-primary"
+                          data-cursor="View"
+                        >
+                          Explore {s.title.split(" ")[0]} Options <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => { setSent(false); setModal(s.title); }}
+                          className="btn-primary"
+                          data-cursor="Book"
+                        >
+                          Request This Service <ArrowUpRight className="h-4 w-4" />
+                        </button>
+                      )}
                     </Reveal>
                   </div>
                 </div>
