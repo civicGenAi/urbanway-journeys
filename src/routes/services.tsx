@@ -5,58 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { IMAGES } from "../lib/images";
 import { Reveal, SplitHeading } from "../components/Reveal";
 import { toast } from "sonner";
-import type { Category } from "../lib/trips";
+import { CATEGORIES, tripsInCategory, formatUsd, buildWhatsAppUrl } from "../lib/trips";
 
-export const Route = createFileRoute("/services")({
-  head: () => ({
-    meta: [
-      { title: "Safari Tours, Airport Transfers & Car Hire in Tanzania | UrbanWay" },
-      { name: "description", content: "Nine ways to experience Tanzania: safaris, transfers, city tours, car hire and custom packages, led by Arusha locals." },
-      { property: "og:title", content: "Safari Tours & Transfers in Tanzania | UrbanWay" },
-      { property: "og:description", content: "Nine services, one trusted local team. Serengeti safaris to JRO transfers." },
-      { property: "og:url", content: "/services" },
-    ],
-    links: [{ rel: "canonical", href: "/services" }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "ItemList",
-          itemListElement: SERVICES.map((s, i) => ({
-            "@type": "Service",
-            position: i + 1,
-            name: s.title,
-            description: s.blurb,
-          })),
-        }),
-      },
-    ],
-  }),
-  component: Services,
-});
-
-const SERVICES: {
-  title: string;
-  blurb: string;
-  inc: string[];
-  img: string;
-  catalog?: Category["slug"];
-}[] = [
-  {
-    title: "Wildlife Safari Tours",
-    blurb: "Multi-day expeditions across Serengeti, Ngorongoro Crater and Tarangire, tailored to your pace.",
-    inc: ["Private licensed guide", "Modern 4x4 with roof hatches", "All park fees included"],
-    img: IMAGES.lion,
-    catalog: "wildlife-safaris",
-  },
-  {
-    title: "Airport Transfers",
-    blurb: "Reliable pickups from Kilimanjaro (JRO), Arusha (ARK) and Zanzibar. On time, always.",
-    inc: ["Flight tracking", "Meet and greet with name board", "Cold water and Wi-Fi on board"],
-    img: IMAGES.fleet,
-    catalog: "airport-transfers",
-  },
+const QUOTE_SERVICES: { title: string; blurb: string; inc: string[]; img: string }[] = [
   {
     title: "City Tours",
     blurb: "Half day and full day tours of Arusha, Moshi and Dar. Markets, cafes, viewpoints.",
@@ -68,20 +19,6 @@ const SERVICES: {
     blurb: "Point to point private transfers between towns, lodges and parks anywhere in Tanzania.",
     inc: ["Door to door service", "Flexible routing", "Multi-lingual drivers"],
     img: IMAGES.road,
-  },
-  {
-    title: "Car Hire",
-    blurb: "Late model Land Cruisers and Rav4s with or without a driver. Self-drive with 24/7 support.",
-    inc: ["Full comprehensive insurance", "Rooftop tents on request", "Nationwide breakdown cover"],
-    img: IMAGES.vehicle,
-    catalog: "car-hire",
-  },
-  {
-    title: "Day Trips & Cultural Tours",
-    blurb: "Materuni waterfalls, coffee farms, Maasai bomas, Lake Duluti canoeing.",
-    inc: ["Community-owned experiences", "Traditional lunch included", "Small group sizes"],
-    img: IMAGES.masai,
-    catalog: "day-trips",
   },
   {
     title: "Hotel Transfers",
@@ -103,9 +40,64 @@ const SERVICES: {
   },
 ];
 
+export const Route = createFileRoute("/services")({
+  head: () => ({
+    meta: [
+      { title: "Safari Tours, Airport Transfers & Car Hire in Tanzania | UrbanWay" },
+      { name: "description", content: "Nine ways to experience Tanzania: safaris, transfers, city tours, car hire and custom packages, led by Arusha locals." },
+      { property: "og:title", content: "Safari Tours & Transfers in Tanzania | UrbanWay" },
+      { property: "og:description", content: "Nine services, one trusted local team. Serengeti safaris to JRO transfers." },
+      { property: "og:url", content: "/services" },
+    ],
+    links: [{ rel: "canonical", href: "/services" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          itemListElement: [
+            ...CATEGORIES.map((c, i) => ({
+              "@type": "Service",
+              position: i + 1,
+              name: c.title,
+              description: c.intro,
+            })),
+            ...QUOTE_SERVICES.map((s, i) => ({
+              "@type": "Service",
+              position: CATEGORIES.length + i + 1,
+              name: s.title,
+              description: s.blurb,
+            })),
+          ],
+        }),
+      },
+    ],
+  }),
+  component: Services,
+});
+
 function Services() {
   const [modal, setModal] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
+
+  function submitQuote(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const name = String(form.get("name") || "").trim();
+    const email = String(form.get("email") || "").trim();
+    const whatsapp = String(form.get("whatsapp") || "").trim();
+    const notes = String(form.get("notes") || "").trim();
+    const msg =
+      `Hello UrbanWay! I'd like a quote for "${modal}".\n` +
+      `Name: ${name || "(please ask)"}\n` +
+      `Email: ${email || "(please ask)"}\n` +
+      (whatsapp ? `WhatsApp: ${whatsapp}\n` : "") +
+      (notes ? `Notes: ${notes}` : "");
+    window.open(buildWhatsAppUrl(msg), "_blank", "noopener");
+    setSent(true);
+    toast.success("Opening WhatsApp. Karibu!");
+  }
 
   return (
     <>
@@ -118,11 +110,66 @@ function Services() {
         </div>
       </section>
 
-      <section className="bg-[color:var(--kilimanjaro-snow)]">
-        <nav className="sticky top-20 z-30 bg-[color:var(--kilimanjaro-snow)]/90 backdrop-blur-md border-b border-black/5">
+      {/* Catalog tier: real trips, real prices */}
+      <section className="bg-[color:var(--kilimanjaro-snow)] py-24 md:py-32">
+        <div className="container-lodge">
+          <div className="mb-14">
+            <p className="eyebrow">Browse the catalog</p>
+            <h2 className="display-section mt-3 max-w-2xl">Pick a starting point, see real trips and prices</h2>
+          </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            {CATEGORIES.map((c, i) => {
+              const trips = tripsInCategory(c.slug);
+              const cheapest = Math.min(...trips.map((t) => t.pricePerPerson));
+              return (
+                <Reveal
+                  key={c.slug}
+                  delay={i * 0.08}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(23,24,26,0.06)] flex flex-col"
+                >
+                  <Link to="/services/$category" params={{ category: c.slug }} className="block aspect-[16/10] img-treat" data-cursor="View">
+                    <img src={c.hero} alt={c.title} />
+                  </Link>
+                  <div className="p-8 flex flex-col flex-1">
+                    <p className="eyebrow">{c.eyebrow}</p>
+                    <h3 className="font-display text-3xl mt-2">
+                      <Link to="/services/$category" params={{ category: c.slug }} className="link-slide">
+                        {c.title}
+                      </Link>
+                    </h3>
+                    <p className="mt-3 text-[color:var(--charcoal)]/70 flex-1">{c.tagline}</p>
+                    <div className="mt-6 pt-6 border-t border-black/8 flex items-end justify-between gap-4">
+                      <div>
+                        <p className="text-xs uppercase tracking-widest text-[color:var(--charcoal)]/50">From</p>
+                        <p className="font-display text-2xl mt-1">{formatUsd(cheapest)}</p>
+                      </div>
+                      <Link
+                        to="/services/$category"
+                        params={{ category: c.slug }}
+                        className="btn-primary text-sm py-3 px-5"
+                        data-cursor="Book"
+                      >
+                        View trips & prices <ArrowUpRight className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Quote-only tier: bespoke services with no fixed catalog */}
+      <section className="bg-white">
+        <div className="container-lodge pt-24 md:pt-32">
+          <p className="eyebrow">Custom requests</p>
+          <h2 className="display-section mt-3 max-w-2xl">More specific? We'll quote it directly</h2>
+        </div>
+        <nav className="sticky top-20 z-30 bg-white/90 backdrop-blur-md border-b border-black/5 mt-14">
           <div className="container-lodge flex gap-6 overflow-x-auto py-4 text-sm text-[color:var(--charcoal)]/70">
-            {SERVICES.map((s, i) => (
-              <a key={i} href={`#s-${i}`} className="whitespace-nowrap hover:text-[color:var(--trail-green)] transition-colors">
+            {QUOTE_SERVICES.map((s, i) => (
+              <a key={i} href={`#q-${i}`} className="whitespace-nowrap hover:text-[color:var(--trail-green)] transition-colors">
                 {String(i + 1).padStart(2, "0")} · {s.title}
               </a>
             ))}
@@ -130,10 +177,10 @@ function Services() {
         </nav>
 
         <div className="py-24">
-          {SERVICES.map((s, i) => {
+          {QUOTE_SERVICES.map((s, i) => {
             const flipped = i % 2 === 1;
             return (
-              <div id={`s-${i}`} key={i} className="border-t border-black/8">
+              <div id={`q-${i}`} key={i} className="border-t border-black/8">
                 <div className="container-lodge py-24 md:py-32 grid gap-12 md:grid-cols-12 items-center">
                   <div className={`md:col-span-6 ${flipped ? "md:order-2" : ""}`}>
                     <Reveal className="aspect-[5/4] rounded-2xl overflow-hidden img-treat" data-cursor="View">
@@ -142,7 +189,7 @@ function Services() {
                   </div>
                   <div className="md:col-span-6">
                     <p className="font-display text-[color:var(--trail-green)] text-lg">
-                      {String(i + 1).padStart(2, "0")} <span className="text-[color:var(--charcoal)]/40">/ 09</span>
+                      {String(i + 1).padStart(2, "0")} <span className="text-[color:var(--charcoal)]/40">/ 05</span>
                     </p>
                     <SplitHeading className="display-section mt-4" text={s.title} />
                     <Reveal delay={0.2} className="mt-5 max-w-lg text-lg text-[color:var(--charcoal)]/75 leading-relaxed">
@@ -157,24 +204,13 @@ function Services() {
                       ))}
                     </ul>
                     <Reveal delay={0.5} className="mt-10">
-                      {s.catalog ? (
-                        <Link
-                          to="/services/$category"
-                          params={{ category: s.catalog }}
-                          className="btn-primary"
-                          data-cursor="View"
-                        >
-                          Explore {s.title.split(" ")[0]} Options <ArrowUpRight className="h-4 w-4" />
-                        </Link>
-                      ) : (
-                        <button
-                          onClick={() => { setSent(false); setModal(s.title); }}
-                          className="btn-primary"
-                          data-cursor="Book"
-                        >
-                          Request This Service <ArrowUpRight className="h-4 w-4" />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => { setSent(false); setModal(s.title); }}
+                        className="btn-primary"
+                        data-cursor="Book"
+                      >
+                        Get a Custom Quote <ArrowUpRight className="h-4 w-4" />
+                      </button>
                     </Reveal>
                   </div>
                 </div>
@@ -229,17 +265,14 @@ function Services() {
               <button onClick={() => setModal(null)} className="absolute top-5 right-5 p-2" aria-label="Close"><X className="h-5 w-5" /></button>
               {!sent ? (
                 <>
-                  <p className="eyebrow">Inquiry</p>
+                  <p className="eyebrow">Custom quote</p>
                   <h3 className="font-display text-3xl mt-2">{modal}</h3>
-                  <form
-                    onSubmit={(e) => { e.preventDefault(); setSent(true); toast.success("Asante! We will WhatsApp you within 12 hours."); }}
-                    className="mt-6 space-y-4"
-                  >
-                    <input required placeholder="Your name" className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)]" />
-                    <input required type="email" placeholder="Email" className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)]" />
-                    <input placeholder="WhatsApp (optional)" className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)]" />
-                    <textarea placeholder="Tell us what you have in mind" rows={3} className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)] resize-none" />
-                    <button className="btn-primary w-full justify-center mt-4" data-cursor="Book">Send inquiry</button>
+                  <form onSubmit={submitQuote} className="mt-6 space-y-4">
+                    <input required name="name" placeholder="Your name" className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)]" />
+                    <input required type="email" name="email" placeholder="Email" className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)]" />
+                    <input name="whatsapp" placeholder="WhatsApp (optional)" className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)]" />
+                    <textarea name="notes" placeholder="Tell us what you have in mind" rows={3} className="w-full border-b border-black/15 py-3 outline-none focus:border-[color:var(--trail-green)] resize-none" />
+                    <button className="btn-primary w-full justify-center mt-4" data-cursor="Book">Send on WhatsApp</button>
                   </form>
                 </>
               ) : (
@@ -248,7 +281,7 @@ function Services() {
                     <Check className="h-8 w-8 text-[color:var(--trail-green)]" />
                   </div>
                   <h3 className="font-display text-3xl mt-6">Asante!</h3>
-                  <p className="mt-2 text-[color:var(--charcoal)]/70">We'll reach out on WhatsApp within 12 hours.</p>
+                  <p className="mt-2 text-[color:var(--charcoal)]/70">We've opened WhatsApp with your details. Send the message and we'll reply within 12 hours.</p>
                 </div>
               )}
             </motion.div>
