@@ -810,12 +810,7 @@ function Receipt({
 
         <div className="bg-[color:var(--forest-deep)] text-white p-8">
           <div className="flex items-center justify-between">
-            <span className="font-display text-2xl">
-              <span className="text-[color:var(--trail-green)] italic">
-                Urban
-              </span>
-              Way
-            </span>
+            <img src="/logo-mark.png" alt="UrbanWay Tours & Safari" className="h-11 w-auto" />
             <span className="text-xs uppercase tracking-widest text-white/60">
               Receipt
             </span>

@@ -9,10 +9,7 @@ export function Footer() {
     <footer className="relative bg-[color:var(--forest-deep)] text-white/85 pt-16 md:pt-24 pb-10 overflow-hidden">
       <div className="container-lodge relative z-10 grid grid-cols-2 gap-x-8 gap-y-12 md:grid-cols-4 md:gap-12">
         <div className="col-span-2 md:col-span-1">
-          <div className="font-display text-3xl">
-            <span className="text-[color:var(--trail-green)] italic">Urban</span>
-            <span className="text-white">Way</span>
-          </div>
+          <img src="/logo-full.png" alt="UrbanWay Tours & Safari" className="h-24 sm:h-28 w-auto" />
           <p className="mt-4 text-sm max-w-xs text-white/70 leading-relaxed">
             Tanzanian hosts, licensed guides, modern 4x4s. From Arusha to the Serengeti and beyond.
           </p>

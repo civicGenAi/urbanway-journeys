@@ -39,9 +39,8 @@ export function Navbar() {
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${barBg}`}
       >
         <div className="container-lodge flex items-center justify-between h-20">
-          <Link to="/" className="flex items-baseline gap-0.5 font-display text-2xl tracking-tight">
-            <span className="text-[color:var(--trail-green)] font-semibold italic">Urban</span>
-            <span className={`${overHero ? "text-white" : "text-[color:var(--charcoal)]"} font-semibold`}>Way</span>
+          <Link to="/" className="flex items-center" aria-label="UrbanWay Tours & Safari">
+            <img src="/logo-mark.png" alt="UrbanWay Tours & Safari" className="h-12 sm:h-14 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-9">
