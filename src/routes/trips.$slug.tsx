@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import {
   ArrowUpRight,
   Check,
+  ChevronDown,
   ChevronLeft,
   Clock,
   MapPin,
@@ -67,6 +68,60 @@ export const Route = createFileRoute("/trips/$slug")({
 });
 
 type Counts = Record<AgeBand, number>;
+
+function AccordionStep({
+  n,
+  title,
+  isOpen,
+  isComplete,
+  summary,
+  onToggle,
+  children,
+}: {
+  n: number;
+  title: string;
+  isOpen: boolean;
+  isComplete: boolean;
+  summary?: string;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+      <button type="button" onClick={onToggle} className="w-full flex items-center gap-4 p-6 sm:p-8 text-left">
+        <span
+          className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center font-display text-sm border transition-colors duration-300 ${
+            isOpen
+              ? "bg-[color:var(--trail-green)] border-[color:var(--trail-green)] text-white"
+              : isComplete
+                ? "bg-[color:var(--trail-green)]/15 border-[color:var(--trail-green)]/40 text-[color:var(--trail-green)]"
+                : "border-white/25 text-white/60"
+          }`}
+        >
+          {isComplete && !isOpen ? <Check className="h-4 w-4" /> : n}
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs uppercase tracking-widest text-white/60">Step {n} of 4</p>
+          <p className="font-display text-xl text-white">{title}</p>
+          {!isOpen && summary && (
+            <p className="text-sm text-white/50 truncate mt-0.5">{summary}</p>
+          )}
+        </div>
+        <ChevronDown
+          className={`h-5 w-5 text-white/50 transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}`}
+        />
+      </button>
+      <motion.div
+        initial={false}
+        animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
+        transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+        className="overflow-hidden"
+      >
+        <div className="px-6 sm:px-8 pb-8">{children}</div>
+      </motion.div>
+    </div>
+  );
+}
 
 function TripPage() {
   const { trip, category } = Route.useLoaderData();
@@ -311,6 +366,7 @@ function BookingForm({
   const [special, setSpecial] = useState("");
   const [mode, setMode] = useState<"full" | "half" | "negotiate">("full");
   const [submitting, setSubmitting] = useState(false);
+  const [openStep, setOpenStep] = useState(1);
 
   const totals = useMemo(() => {
     const per = pricePerPerson;
@@ -328,8 +384,30 @@ function BookingForm({
   const totalGuests =
     counts.adult + counts.youth + counts.child + counts.infant;
 
+  const PAYMENT_OPTIONS = [
+    {
+      id: "full" as const,
+      title: "Pay in full",
+      desc: "Settle 100% now. Full receipt and SMS confirmation.",
+      badge: formatUsd(totals.total),
+    },
+    {
+      id: "half" as const,
+      title: "Pay 50% deposit",
+      desc: "Half now, balance on the day. Spot is confirmed.",
+      badge: formatUsd(totals.total / 2),
+    },
+    {
+      id: "negotiate" as const,
+      title: "Negotiate",
+      desc: "Chat with us on WhatsApp to arrange group rates or a custom plan.",
+      badge: "WhatsApp",
+    },
+  ];
+
   function updateCount(band: AgeBand, delta: number) {
     setCounts((c) => ({ ...c, [band]: Math.max(0, c[band] + delta) }));
+    if (openStep === 2) setOpenStep(3);
   }
 
   function submit(e: React.FormEvent) {
@@ -382,12 +460,15 @@ function BookingForm({
       onSubmit={submit}
       className="grid gap-8 lg:grid-cols-12 items-start"
     >
-      <div className="lg:col-span-7 space-y-8">
-        {/* Contact */}
-        <fieldset className="bg-white/5 rounded-2xl p-8 border border-white/10">
-          <legend className="px-3 -mt-11 mb-2 bg-[color:var(--forest-deep)] text-white/70 text-xs uppercase tracking-widest">
-            01 · Your details
-          </legend>
+      <div className="lg:col-span-7 space-y-4">
+        <AccordionStep
+          n={1}
+          title="Your details"
+          isOpen={openStep === 1}
+          isComplete={Boolean(name.trim() && email.trim() && phone.trim())}
+          summary={name && email ? `${name} · ${email}` : undefined}
+          onToggle={() => setOpenStep(openStep === 1 ? 0 : 1)}
+        >
           <div className="grid gap-6 sm:grid-cols-2">
             <label className="block">
               <span className="text-xs uppercase tracking-widest text-white/60">
@@ -440,6 +521,9 @@ function BookingForm({
                   onChange={(e) =>
                     setPhone(e.target.value.replace(/[^0-9 ]/g, ""))
                   }
+                  onBlur={() => {
+                    if (openStep === 1 && name.trim() && email.trim() && phone.trim()) setOpenStep(2);
+                  }}
                   placeholder="712 345 678"
                   inputMode="tel"
                   className="flex-1 bg-transparent border-b border-white/25 py-3 outline-none text-white placeholder:text-white/30 focus:border-[color:var(--trail-green)]"
@@ -458,13 +542,16 @@ function BookingForm({
               />
             </label>
           </div>
-        </fieldset>
+        </AccordionStep>
 
-        {/* Travelers */}
-        <fieldset className="bg-white/5 rounded-2xl p-8 border border-white/10">
-          <legend className="px-3 -mt-11 mb-2 bg-[color:var(--forest-deep)] text-white/70 text-xs uppercase tracking-widest">
-            02 · Travelers & age groups
-          </legend>
+        <AccordionStep
+          n={2}
+          title="Travelers & age groups"
+          isOpen={openStep === 2}
+          isComplete={totalGuests > 0}
+          summary={totalGuests > 0 ? `${totalGuests} traveler${totalGuests > 1 ? "s" : ""}` : undefined}
+          onToggle={() => setOpenStep(openStep === 2 ? 0 : 2)}
+        >
           <p className="text-sm text-white/60 mb-6">
             Price adjusts automatically per age group.
           </p>
@@ -508,16 +595,22 @@ function BookingForm({
               </div>
             ))}
           </div>
-        </fieldset>
+        </AccordionStep>
 
-        {/* Special */}
-        <fieldset className="bg-white/5 rounded-2xl p-8 border border-white/10">
-          <legend className="px-3 -mt-11 mb-2 bg-[color:var(--forest-deep)] text-white/70 text-xs uppercase tracking-widest">
-            03 · Anything special
-          </legend>
+        <AccordionStep
+          n={3}
+          title="Anything special"
+          isOpen={openStep === 3}
+          isComplete={openStep > 3}
+          summary={special ? special.slice(0, 50) + (special.length > 50 ? "…" : "") : "No special requests"}
+          onToggle={() => setOpenStep(openStep === 3 ? 0 : 3)}
+        >
           <textarea
             value={special}
             onChange={(e) => setSpecial(e.target.value)}
+            onBlur={() => {
+              if (openStep === 3) setOpenStep(4);
+            }}
             placeholder="Dietary needs, accessibility, celebrations, photography focus, pickup location, or anything else."
             rows={4}
             maxLength={500}
@@ -526,57 +619,33 @@ function BookingForm({
           <p className="text-xs text-white/40 mt-2">
             {special.length}/500
           </p>
-        </fieldset>
+        </AccordionStep>
 
-        {/* Payment */}
-        <fieldset className="bg-white/5 rounded-2xl p-8 border border-white/10">
-          <legend className="px-3 -mt-11 mb-2 bg-[color:var(--forest-deep)] text-white/70 text-xs uppercase tracking-widest">
-            04 · Payment mode
-          </legend>
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              {
-                id: "full" as const,
-                title: "Pay in full",
-                desc: "Settle 100% now. Full receipt and SMS confirmation.",
-                badge: formatUsd(totals.total),
-              },
-              {
-                id: "half" as const,
-                title: "Pay 50% deposit",
-                desc: "Half now, balance on the day. Spot is confirmed.",
-                badge: formatUsd(totals.total / 2),
-              },
-              {
-                id: "negotiate" as const,
-                title: "Negotiate on WhatsApp",
-                desc: "Chat with us to arrange group rates or a custom plan.",
-                badge: "Chat",
-              },
-            ].map((opt) => {
+        <AccordionStep
+          n={4}
+          title="Payment mode"
+          isOpen={openStep === 4}
+          isComplete={false}
+          summary={PAYMENT_OPTIONS.find((o) => o.id === mode)?.title}
+          onToggle={() => setOpenStep(openStep === 4 ? 0 : 4)}
+        >
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            {PAYMENT_OPTIONS.map((opt) => {
               const active = mode === opt.id;
               return (
                 <button
                   key={opt.id}
                   type="button"
                   onClick={() => setMode(opt.id)}
-                  className={`text-left p-5 rounded-xl border transition-all duration-500 ${
+                  className={`text-center sm:text-left p-3 sm:p-5 rounded-xl border transition-all duration-500 ${
                     active
                       ? "bg-[color:var(--trail-green)] border-[color:var(--trail-green)] text-white"
                       : "border-white/15 text-white/85 hover:border-white/40"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="font-display text-xl">{opt.title}</p>
-                    {active && <Check className="h-5 w-5" />}
-                  </div>
+                  <p className="font-display text-sm sm:text-xl leading-tight">{opt.title}</p>
                   <p
-                    className={`text-sm mt-2 ${active ? "text-white/90" : "text-white/55"}`}
-                  >
-                    {opt.desc}
-                  </p>
-                  <p
-                    className={`mt-4 text-xs uppercase tracking-widest ${active ? "text-white" : "text-white/60"}`}
+                    className={`mt-1 sm:mt-4 text-[10px] sm:text-xs uppercase tracking-widest ${active ? "text-white" : "text-white/60"}`}
                   >
                     {opt.badge}
                   </p>
@@ -584,7 +653,10 @@ function BookingForm({
               );
             })}
           </div>
-        </fieldset>
+          <p className="mt-4 text-sm text-white/60">
+            {PAYMENT_OPTIONS.find((o) => o.id === mode)?.desc}
+          </p>
+        </AccordionStep>
       </div>
 
       {/* Summary */}
