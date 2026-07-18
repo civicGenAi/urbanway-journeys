@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Leaf, ArrowUpRight, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IMAGES } from "../lib/images";
 import { Reveal, SplitHeading } from "../components/Reveal";
 import { toast } from "sonner";
+import type { Category } from "../lib/trips";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
