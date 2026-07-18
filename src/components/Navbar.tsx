@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const links = [
   { to: "/", label: "Home" },
   { to: "/services", label: "Services" },
-  { to: "/bookings", label: "Bookings" },
+  { to: "/bookings", label: "Plan With Us" },
   { to: "/gallery", label: "Gallery" },
   { to: "/reviews", label: "Reviews" },
 ];
