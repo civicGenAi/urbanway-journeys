@@ -3,7 +3,6 @@ import { useMemo, useState } from "react";
 import {
   ArrowUpRight,
   Check,
-  ChevronDown,
   ChevronLeft,
   Clock,
   MapPin,
@@ -75,7 +74,6 @@ function AccordionStep({
   isOpen,
   isComplete,
   summary,
-  onToggle,
   children,
 }: {
   n: number;
@@ -83,12 +81,11 @@ function AccordionStep({
   isOpen: boolean;
   isComplete: boolean;
   summary?: string;
-  onToggle: () => void;
   children: React.ReactNode;
 }) {
   return (
     <div>
-      <button type="button" onClick={onToggle} className="w-full flex items-center gap-4 p-6 sm:p-8 text-left">
+      <div className="w-full flex items-center gap-4 p-6 sm:p-8 text-left">
         <span
           className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center font-display text-sm border transition-colors duration-300 ${
             isOpen
@@ -107,10 +104,7 @@ function AccordionStep({
             <p className="text-sm text-white/50 truncate mt-0.5">{summary}</p>
           )}
         </div>
-        <ChevronDown
-          className={`h-5 w-5 text-white/50 transition-transform duration-300 shrink-0 ${isOpen ? "rotate-180" : ""}`}
-        />
-      </button>
+      </div>
       <motion.div
         initial={false}
         animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
@@ -407,7 +401,18 @@ function BookingForm({
 
   function updateCount(band: AgeBand, delta: number) {
     setCounts((c) => ({ ...c, [band]: Math.max(0, c[band] + delta) }));
-    if (openStep === 2) setOpenStep(3);
+  }
+
+  function goNext(step: number) {
+    if (step === 1 && !(name.trim() && email.trim() && phone.trim())) {
+      toast.error("Please fill in your name, email and phone first.");
+      return;
+    }
+    setOpenStep(step + 1);
+  }
+
+  function goBack(step: number) {
+    setOpenStep(step - 1);
   }
 
   function submit(e: React.FormEvent) {
@@ -467,7 +472,6 @@ function BookingForm({
           isOpen={openStep === 1}
           isComplete={Boolean(name.trim() && email.trim() && phone.trim())}
           summary={name && email ? `${name} · ${email}` : undefined}
-          onToggle={() => setOpenStep(openStep === 1 ? 0 : 1)}
         >
           <div className="grid gap-6 sm:grid-cols-2">
             <label className="block">
@@ -521,9 +525,6 @@ function BookingForm({
                   onChange={(e) =>
                     setPhone(e.target.value.replace(/[^0-9 ]/g, ""))
                   }
-                  onBlur={() => {
-                    if (openStep === 1 && name.trim() && email.trim() && phone.trim()) setOpenStep(2);
-                  }}
                   placeholder="712 345 678"
                   inputMode="tel"
                   className="flex-1 bg-transparent border-b border-white/25 py-3 outline-none text-white placeholder:text-white/30 focus:border-[color:var(--trail-green)]"
@@ -542,15 +543,19 @@ function BookingForm({
               />
             </label>
           </div>
+          <div className="mt-8 flex items-center justify-end">
+            <button type="button" onClick={() => goNext(1)} className="btn-primary py-3 px-6 text-sm">
+              Next <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
         </AccordionStep>
 
         <AccordionStep
           n={2}
           title="Travelers & age groups"
           isOpen={openStep === 2}
-          isComplete={totalGuests > 0}
+          isComplete={openStep > 2}
           summary={totalGuests > 0 ? `${totalGuests} traveler${totalGuests > 1 ? "s" : ""}` : undefined}
-          onToggle={() => setOpenStep(openStep === 2 ? 0 : 2)}
         >
           <p className="text-sm text-white/60 mb-6">
             Price adjusts automatically per age group.
@@ -595,6 +600,14 @@ function BookingForm({
               </div>
             ))}
           </div>
+          <div className="mt-8 flex items-center justify-between">
+            <button type="button" onClick={() => goBack(2)} className="inline-flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white">
+              <ChevronLeft className="h-4 w-4" /> Back
+            </button>
+            <button type="button" onClick={() => goNext(2)} className="btn-primary py-3 px-6 text-sm">
+              Next <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
         </AccordionStep>
 
         <AccordionStep
@@ -603,14 +616,10 @@ function BookingForm({
           isOpen={openStep === 3}
           isComplete={openStep > 3}
           summary={special ? special.slice(0, 50) + (special.length > 50 ? "…" : "") : "No special requests"}
-          onToggle={() => setOpenStep(openStep === 3 ? 0 : 3)}
         >
           <textarea
             value={special}
             onChange={(e) => setSpecial(e.target.value)}
-            onBlur={() => {
-              if (openStep === 3) setOpenStep(4);
-            }}
             placeholder="Dietary needs, accessibility, celebrations, photography focus, pickup location, or anything else."
             rows={4}
             maxLength={500}
@@ -619,6 +628,14 @@ function BookingForm({
           <p className="text-xs text-white/40 mt-2">
             {special.length}/500
           </p>
+          <div className="mt-8 flex items-center justify-between">
+            <button type="button" onClick={() => goBack(3)} className="inline-flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white">
+              <ChevronLeft className="h-4 w-4" /> Back
+            </button>
+            <button type="button" onClick={() => goNext(3)} className="btn-primary py-3 px-6 text-sm">
+              Next <ArrowUpRight className="h-4 w-4" />
+            </button>
+          </div>
         </AccordionStep>
 
         <AccordionStep
@@ -627,7 +644,6 @@ function BookingForm({
           isOpen={openStep === 4}
           isComplete={false}
           summary={PAYMENT_OPTIONS.find((o) => o.id === mode)?.title}
-          onToggle={() => setOpenStep(openStep === 4 ? 0 : 4)}
         >
           <div className="grid grid-cols-3 gap-2 sm:gap-4">
             {PAYMENT_OPTIONS.map((opt) => {
@@ -656,6 +672,11 @@ function BookingForm({
           <p className="mt-4 text-sm text-white/60">
             {PAYMENT_OPTIONS.find((o) => o.id === mode)?.desc}
           </p>
+          <div className="mt-8">
+            <button type="button" onClick={() => goBack(4)} className="inline-flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white">
+              <ChevronLeft className="h-4 w-4" /> Back
+            </button>
+          </div>
         </AccordionStep>
       </div>
 
