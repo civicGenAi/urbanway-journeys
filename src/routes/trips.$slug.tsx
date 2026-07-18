@@ -20,8 +20,8 @@ import { Reveal, SplitHeading } from "../components/Reveal";
 import {
   AGE_BANDS,
   type AgeBand,
-  CONFIG,
   COUNTRY_CODES,
+  buildWhatsAppUrl,
   findTrip,
   findCategory,
   formatUsd,
@@ -345,13 +345,12 @@ function BookingForm({
 
     if (mode === "negotiate") {
       const msg =
-        `Hello UrbanWay! I'd like to negotiate a booking for "${tripTitle}".%0A` +
-        `Guests: ${counts.adult} adult, ${counts.youth} youth, ${counts.child} child, ${counts.infant} infant.%0A` +
-        (date ? `Preferred date: ${date}.%0A` : "") +
-        (special ? `Notes: ${special.slice(0, 200)}%0A` : "") +
+        `Hello UrbanWay! I'd like to negotiate a booking for "${tripTitle}".\n` +
+        `Guests: ${counts.adult} adult, ${counts.youth} youth, ${counts.child} child, ${counts.infant} infant.\n` +
+        (date ? `Preferred date: ${date}.\n` : "") +
+        (special ? `Notes: ${special.slice(0, 200)}\n` : "") +
         `My name is ${name || "(please ask)"}, email ${email || "(please ask)"}.`;
-      const wa = CONFIG.whatsapp.replace(/[^0-9]/g, "");
-      window.open(`https://wa.me/${wa}?text=${msg}`, "_blank", "noopener");
+      window.open(buildWhatsAppUrl(msg), "_blank", "noopener");
       toast.success("Opening WhatsApp to negotiate. Karibu!");
       return;
     }

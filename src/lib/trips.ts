@@ -604,3 +604,8 @@ export function formatTzs(n: number): string {
     )
   );
 }
+
+export function buildWhatsAppUrl(message: string): string {
+  const digits = CONFIG.whatsapp.replace(/[^0-9]/g, "");
+  return `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+}
