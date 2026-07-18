@@ -461,11 +461,8 @@ function BookingForm({
   }
 
   return (
-    <form
-      onSubmit={submit}
-      className="grid gap-8 lg:grid-cols-12 items-start"
-    >
-      <div className="lg:col-span-7 bg-white/5 rounded-2xl border border-white/10 divide-y divide-white/10 overflow-hidden">
+    <form onSubmit={submit} className="max-w-2xl">
+      <div className="bg-white/5 rounded-2xl border border-white/10 divide-y divide-white/10 overflow-hidden">
         <AccordionStep
           n={1}
           title="Your details"
@@ -678,11 +675,9 @@ function BookingForm({
             </button>
           </div>
         </AccordionStep>
-      </div>
 
-      {/* Summary */}
-      <aside className="lg:col-span-5 lg:sticky lg:top-28">
-        <div className="bg-[color:var(--kilimanjaro-snow)] text-[color:var(--charcoal)] rounded-2xl p-8 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+        {/* Summary + submit, part of the same card */}
+        <div className="bg-[color:var(--kilimanjaro-snow)] text-[color:var(--charcoal)] p-6 sm:p-8">
           <p className="eyebrow">Booking summary</p>
           <h3 className="font-display text-2xl mt-2">{tripTitle}</h3>
 
@@ -759,7 +754,7 @@ function BookingForm({
             provider.
           </p>
         </div>
-      </aside>
+      </div>
     </form>
   );
 }
