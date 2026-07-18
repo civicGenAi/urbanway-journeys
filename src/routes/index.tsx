@@ -65,19 +65,17 @@ const HERO_HEADLINES = [
   { text: "Your Trusted Gateway to Tanzania", italicWord: "Tanzania" },
   { text: "Handcrafted Journeys Into the Wild", italicWord: "Wild" },
   { text: "Where the City Meets Kilimanjaro", italicWord: "Kilimanjaro" },
+  { text: "Journeys That Feel Like Home", italicWord: "Home" },
 ];
 
 function HeroHeadline() {
   const [i, setI] = useState(0);
-  const [cycles, setCycles] = useState(0);
   useEffect(() => {
-    if (cycles >= 3) return;
-    const t = setTimeout(() => {
+    const t = setInterval(() => {
       setI((x) => (x + 1) % HERO_HEADLINES.length);
-      setCycles((c) => c + 1);
-    }, 4200);
-    return () => clearTimeout(t);
-  }, [cycles]);
+    }, 4600);
+    return () => clearInterval(t);
+  }, []);
 
   const h = HERO_HEADLINES[i];
   return (
@@ -155,14 +153,11 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-[color:var(--forest-deep)]/85" />
 
       <div className="relative z-10 container-lodge h-full flex flex-col justify-end pb-24 pt-32">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9 }}
+        <SplitHeading
+          as="p"
           className="eyebrow !text-white/80"
-        >
-          Tanzania, from the city to the wild
-        </motion.p>
+          text="Tanzania, from the city to the wild"
+        />
 
         <HeroHeadline />
 

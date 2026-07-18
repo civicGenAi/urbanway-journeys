@@ -89,7 +89,7 @@ export function SplitHeading({
 }: {
   text: string;
   className?: string;
-  as?: "h1" | "h2" | "h3";
+  as?: "h1" | "h2" | "h3" | "p";
   italicWord?: string;
 }) {
   const ref = useRef(null);
