@@ -36,18 +36,26 @@ export const Route = createFileRoute("/services")({
   component: Services,
 });
 
-const SERVICES = [
+const SERVICES: {
+  title: string;
+  blurb: string;
+  inc: string[];
+  img: string;
+  catalog?: Category["slug"];
+}[] = [
   {
     title: "Wildlife Safari Tours",
     blurb: "Multi-day expeditions across Serengeti, Ngorongoro Crater and Tarangire, tailored to your pace.",
     inc: ["Private licensed guide", "Modern 4x4 with roof hatches", "All park fees included"],
     img: IMAGES.lion,
+    catalog: "wildlife-safaris",
   },
   {
     title: "Airport Transfers",
     blurb: "Reliable pickups from Kilimanjaro (JRO), Arusha (ARK) and Zanzibar. On time, always.",
     inc: ["Flight tracking", "Meet and greet with name board", "Cold water and Wi-Fi on board"],
     img: IMAGES.fleet,
+    catalog: "airport-transfers",
   },
   {
     title: "City Tours",
@@ -66,12 +74,14 @@ const SERVICES = [
     blurb: "Late model Land Cruisers and Rav4s with or without a driver. Self-drive with 24/7 support.",
     inc: ["Full comprehensive insurance", "Rooftop tents on request", "Nationwide breakdown cover"],
     img: IMAGES.vehicle,
+    catalog: "car-hire",
   },
   {
     title: "Day Trips & Cultural Tours",
     blurb: "Materuni waterfalls, coffee farms, Maasai bomas, Lake Duluti canoeing.",
     inc: ["Community-owned experiences", "Traditional lunch included", "Small group sizes"],
     img: IMAGES.masai,
+    catalog: "day-trips",
   },
   {
     title: "Hotel Transfers",
