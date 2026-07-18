@@ -14,6 +14,7 @@ import { Route as ReviewsRouteImport } from './routes/reviews'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as BookingsRouteImport } from './routes/bookings'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as TripsSlugRouteImport } from './routes/trips.$slug'
 import { Route as ServicesCategoryRouteImport } from './routes/services.$category'
 
@@ -42,6 +43,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ServicesIndexRoute = ServicesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ServicesRoute,
+} as any)
 const TripsSlugRoute = TripsSlugRouteImport.update({
   id: '/trips/$slug',
   path: '/trips/$slug',
@@ -61,15 +67,16 @@ export interface FileRoutesByFullPath {
   '/services': typeof ServicesRouteWithChildren
   '/services/$category': typeof ServicesCategoryRoute
   '/trips/$slug': typeof TripsSlugRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bookings': typeof BookingsRoute
   '/gallery': typeof GalleryRoute
   '/reviews': typeof ReviewsRoute
-  '/services': typeof ServicesRouteWithChildren
   '/services/$category': typeof ServicesCategoryRoute
   '/trips/$slug': typeof TripsSlugRoute
+  '/services': typeof ServicesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +87,7 @@ export interface FileRoutesById {
   '/services': typeof ServicesRouteWithChildren
   '/services/$category': typeof ServicesCategoryRoute
   '/trips/$slug': typeof TripsSlugRoute
+  '/services/': typeof ServicesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +99,16 @@ export interface FileRouteTypes {
     | '/services'
     | '/services/$category'
     | '/trips/$slug'
+    | '/services/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/bookings'
     | '/gallery'
     | '/reviews'
-    | '/services'
     | '/services/$category'
     | '/trips/$slug'
+    | '/services'
   id:
     | '__root__'
     | '/'
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/services'
     | '/services/$category'
     | '/trips/$slug'
+    | '/services/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -157,6 +167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/services/': {
+      id: '/services/'
+      path: '/'
+      fullPath: '/services/'
+      preLoaderRoute: typeof ServicesIndexRouteImport
+      parentRoute: typeof ServicesRoute
+    }
     '/trips/$slug': {
       id: '/trips/$slug'
       path: '/trips/$slug'
@@ -176,10 +193,12 @@ declare module '@tanstack/react-router' {
 
 interface ServicesRouteChildren {
   ServicesCategoryRoute: typeof ServicesCategoryRoute
+  ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
   ServicesCategoryRoute: ServicesCategoryRoute,
+  ServicesIndexRoute: ServicesIndexRoute,
 }
 
 const ServicesRouteWithChildren = ServicesRoute._addFileChildren(
@@ -197,3 +216,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
