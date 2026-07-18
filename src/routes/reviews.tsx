@@ -80,7 +80,7 @@ function Reviews() {
 
       <FeaturedCarousel />
 
-      <section className="bg-[color:var(--savanna-sand)] py-28 md:py-36">
+      <section className="bg-[color:var(--savanna-sand)] py-16 md:py-36">
         <div className="container-lodge">
           <p className="eyebrow">Every voice matters</p>
           <SplitHeading className="display-section mt-3 max-w-3xl" text="Voices from twelve countries and counting" />
@@ -117,7 +117,7 @@ function Reviews() {
       </section>
 
       <section
-        className="relative py-28 md:py-36 text-white overflow-hidden"
+        className="relative py-16 md:py-36 text-white overflow-hidden"
         style={{ background: "linear-gradient(135deg, var(--trail-green), var(--forest-deep))" }}
       >
         <div className="container-lodge relative text-center">
@@ -145,7 +145,7 @@ function FeaturedCarousel() {
 
   const r = featured[i];
   return (
-    <section className="py-24 md:py-32 bg-[color:var(--kilimanjaro-snow)]">
+    <section className="py-14 md:py-32 bg-[color:var(--kilimanjaro-snow)]">
       <div className="container-lodge">
         <div className="relative bg-white rounded-2xl p-10 md:p-16 shadow-[0_20px_60px_rgba(23,24,26,0.06)] overflow-hidden">
           <AnimatePresence mode="wait">

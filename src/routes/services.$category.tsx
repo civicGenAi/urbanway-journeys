@@ -83,7 +83,7 @@ function CategoryPage() {
         </div>
       </section>
 
-      <section className="bg-[color:var(--kilimanjaro-snow)] py-24 md:py-32">
+      <section className="bg-[color:var(--kilimanjaro-snow)] py-14 md:py-32">
         <div className="container-lodge">
           <div className="flex items-end justify-between mb-14 gap-6 flex-wrap">
             <div>

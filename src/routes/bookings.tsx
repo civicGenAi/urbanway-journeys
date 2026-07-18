@@ -50,7 +50,7 @@ function PlanWithUs() {
         </div>
       </section>
 
-      <section className="bg-[color:var(--kilimanjaro-snow)] py-24 md:py-32">
+      <section className="bg-[color:var(--kilimanjaro-snow)] py-14 md:py-32">
         <div className="container-lodge grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-8">
             <PlanForm />
@@ -74,7 +74,7 @@ function PlanWithUs() {
         </div>
       </section>
 
-      <section className="bg-[color:var(--savanna-sand)] py-28 md:py-36">
+      <section className="bg-[color:var(--savanna-sand)] py-16 md:py-36">
         <div className="container-lodge grid gap-16 md:grid-cols-12">
           <div className="md:col-span-4">
             <p className="eyebrow">Good to know</p>

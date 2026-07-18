@@ -111,7 +111,7 @@ function Services() {
       </section>
 
       {/* Catalog tier: real trips, real prices */}
-      <section className="bg-[color:var(--kilimanjaro-snow)] py-24 md:py-32">
+      <section className="bg-[color:var(--kilimanjaro-snow)] py-14 md:py-32">
         <div className="container-lodge">
           <div className="mb-14">
             <p className="eyebrow">Browse the catalog</p>
@@ -162,11 +162,13 @@ function Services() {
 
       {/* Quote-only tier: bespoke services with no fixed catalog */}
       <section className="bg-white">
-        <div className="container-lodge pt-24 md:pt-32">
+        <div className="container-lodge pt-14 md:pt-32">
           <p className="eyebrow">Custom requests</p>
           <h2 className="display-section mt-3 max-w-2xl">More specific? We'll quote it directly</h2>
         </div>
-        <nav className="sticky top-20 z-30 bg-white/90 backdrop-blur-md border-b border-black/5 mt-14">
+
+        {/* Desktop: sticky jump nav */}
+        <nav className="hidden md:block sticky top-20 z-30 bg-white/90 backdrop-blur-md border-b border-black/5 mt-14">
           <div className="container-lodge flex gap-6 overflow-x-auto py-4 text-sm text-[color:var(--charcoal)]/70">
             {QUOTE_SERVICES.map((s, i) => (
               <a key={i} href={`#q-${i}`} className="whitespace-nowrap hover:text-[color:var(--trail-green)] transition-colors">
@@ -176,7 +178,30 @@ function Services() {
           </div>
         </nav>
 
-        <div className="py-24">
+        {/* Mobile: compact list, no per-item full-bleed blocks */}
+        <div className="md:hidden container-lodge pt-8 pb-6">
+          {QUOTE_SERVICES.map((s, i) => (
+            <div key={i} className="flex gap-4 py-6 border-t border-black/8 first:border-t-0">
+              <div className="h-20 w-20 shrink-0 rounded-xl overflow-hidden img-treat">
+                <img src={s.img} alt={s.title} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-display text-lg">{s.title}</h3>
+                <p className="mt-1 text-sm text-[color:var(--charcoal)]/65 line-clamp-2">{s.blurb}</p>
+                <button
+                  onClick={() => { setSent(false); setModal(s.title); }}
+                  className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-[color:var(--trail-green)]"
+                  data-cursor="Book"
+                >
+                  Get a Custom Quote <ArrowUpRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: full editorial blocks */}
+        <div className="hidden md:block py-24">
           {QUOTE_SERVICES.map((s, i) => {
             const flipped = i % 2 === 1;
             return (
@@ -220,7 +245,7 @@ function Services() {
         </div>
       </section>
 
-      <section className="bg-[color:var(--savanna-sand)] py-28 md:py-36">
+      <section className="bg-[color:var(--savanna-sand)] py-16 md:py-36">
         <div className="container-lodge">
           <div className="text-center max-w-2xl mx-auto">
             <p className="eyebrow">Two ways to travel</p>

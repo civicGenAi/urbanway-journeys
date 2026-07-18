@@ -184,7 +184,7 @@ function TripPage() {
         </div>
       </section>
 
-      <section className="bg-white py-20 md:py-24">
+      <section className="bg-white py-14 md:py-24">
         <div className="container-lodge grid gap-16 md:grid-cols-3">
           <div>
             <p className="eyebrow">Activities</p>
@@ -235,7 +235,7 @@ function TripPage() {
 
       <section
         id="book"
-        className="bg-[color:var(--forest-deep)] text-white py-24 md:py-32"
+        className="bg-[color:var(--forest-deep)] text-white py-14 md:py-32"
       >
         <div className="container-lodge">
           <div className="max-w-2xl">

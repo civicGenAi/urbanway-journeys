@@ -206,7 +206,7 @@ function Hero() {
 
 function Intro() {
   return (
-    <section className="py-28 md:py-40 bg-[color:var(--kilimanjaro-snow)]">
+    <section className="py-16 md:py-40 bg-[color:var(--kilimanjaro-snow)]">
       <div className="container-lodge grid gap-16 md:grid-cols-12 items-center">
         <div className="md:col-span-7">
           <p className="eyebrow">Our name, our promise</p>
@@ -262,7 +262,7 @@ function CityToWild() {
   ];
 
   return (
-    <section ref={ref} className="relative bg-[color:var(--charcoal)] text-white" style={{ height: "300vh" }}>
+    <section ref={ref} className="relative bg-[color:var(--charcoal)] text-white h-[220vh] md:h-[300vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         {panels.map((p, i) => {
           const start = i / panels.length;
@@ -308,7 +308,7 @@ function FeaturedServices() {
     { title: "Car Hire", copy: "Modern Land Cruisers with a driver, or self-drive with support.", img: IMAGES.vehicle, slug: "car-hire" },
   ];
   return (
-    <section className="py-28 md:py-40 bg-[color:var(--savanna-sand)]">
+    <section className="py-16 md:py-40 bg-[color:var(--savanna-sand)]">
       <div className="container-lodge">
         <div className="flex flex-wrap items-end justify-between gap-6 mb-16">
           <div>
@@ -390,7 +390,7 @@ function WhyUs() {
     "Tailor-made itineraries",
   ];
   return (
-    <section className="py-28 md:py-40 bg-[color:var(--forest-deep)] text-white">
+    <section className="py-16 md:py-40 bg-[color:var(--forest-deep)] text-white">
       <div className="container-lodge grid gap-16 md:grid-cols-12">
         <div className="md:col-span-4">
           <p className="eyebrow !text-[color:var(--trail-green)]">Why UrbanWay</p>
@@ -442,7 +442,7 @@ function TestimonialsPreview() {
   ];
   const track = [...quotes, ...quotes];
   return (
-    <section className="py-28 md:py-40 bg-[color:var(--kilimanjaro-snow)] overflow-hidden">
+    <section className="py-16 md:py-40 bg-[color:var(--kilimanjaro-snow)] overflow-hidden">
       <div className="container-lodge">
         <div className="flex justify-between items-end mb-14">
           <div>
@@ -479,7 +479,7 @@ function TestimonialsPreview() {
 function CtaBand() {
   return (
     <section
-      className="relative py-28 md:py-40 text-white overflow-hidden"
+      className="relative py-16 md:py-40 text-white overflow-hidden"
       style={{ background: "linear-gradient(135deg, var(--trail-green), var(--forest-deep))" }}
     >
       <svg
