@@ -171,7 +171,7 @@ function Hero() {
         </Reveal>
 
         <Reveal delay={0.6} className="mt-10 flex flex-wrap gap-4">
-          <Link to="/bookings" className="btn-primary" data-cursor="Book">
+          <Link to="/services" className="btn-primary" data-cursor="Book">
             Explore Safaris <ArrowUpRight className="h-4 w-4" />
           </Link>
           <button className="btn-ghost" data-cursor="Play">
@@ -502,7 +502,7 @@ function CtaBand() {
         <p className="eyebrow !text-white/80">The wild is calling</p>
         <SplitHeading className="mt-4 font-display font-medium text-[clamp(3rem,9vw,8rem)] leading-[0.95] !text-white" text="Let's build your journey" />
         <Reveal delay={0.3} className="mt-10">
-          <Link to="/bookings" className="btn-primary !bg-white !text-[color:var(--forest-deep)] hover:!bg-[color:var(--kilimanjaro-snow)]" data-cursor="Book">
+          <Link to="/services" className="btn-primary !bg-white !text-[color:var(--forest-deep)] hover:!bg-[color:var(--kilimanjaro-snow)]" data-cursor="Book">
             Start Planning <ArrowUpRight className="h-4 w-4" />
           </Link>
         </Reveal>

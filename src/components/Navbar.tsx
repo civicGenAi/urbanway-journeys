@@ -62,7 +62,7 @@ export function Navbar() {
             })}
           </nav>
 
-          <Link to="/bookings" className="hidden md:inline-flex btn-primary text-sm py-3 px-5">
+          <Link to="/services" className="hidden md:inline-flex btn-primary text-sm py-3 px-5">
             Plan Your Safari <ArrowUpRight className="h-4 w-4" />
           </Link>
 

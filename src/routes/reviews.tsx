@@ -124,7 +124,7 @@ function Reviews() {
           <p className="eyebrow !text-white/85">Your turn</p>
           <SplitHeading className="mt-4 !text-white font-display font-medium text-[clamp(2.5rem,7vw,6rem)] leading-[0.98]" text="Write the Next Story" />
           <Reveal delay={0.3} className="mt-10">
-            <Link to="/bookings" className="btn-primary !bg-white !text-[color:var(--forest-deep)]" data-cursor="Book">
+            <Link to="/services" className="btn-primary !bg-white !text-[color:var(--forest-deep)]" data-cursor="Book">
               Start Planning <ArrowUpRight className="h-4 w-4" />
             </Link>
           </Reveal>
