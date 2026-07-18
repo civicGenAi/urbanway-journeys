@@ -87,7 +87,7 @@ function AccordionStep({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+    <div>
       <button type="button" onClick={onToggle} className="w-full flex items-center gap-4 p-6 sm:p-8 text-left">
         <span
           className={`h-8 w-8 shrink-0 rounded-full flex items-center justify-center font-display text-sm border transition-colors duration-300 ${
@@ -460,7 +460,7 @@ function BookingForm({
       onSubmit={submit}
       className="grid gap-8 lg:grid-cols-12 items-start"
     >
-      <div className="lg:col-span-7 space-y-4">
+      <div className="lg:col-span-7 bg-white/5 rounded-2xl border border-white/10 divide-y divide-white/10 overflow-hidden">
         <AccordionStep
           n={1}
           title="Your details"
