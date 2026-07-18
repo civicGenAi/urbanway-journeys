@@ -109,7 +109,7 @@ function TripPage() {
               />
             </div>
             <div className="mt-4 grid grid-cols-3 gap-4">
-              {trip.images.map((src, i) => (
+              {trip.images.map((src: string, i: number) => (
                 <button
                   key={i}
                   onClick={() => setActiveImg(i)}
@@ -190,7 +190,7 @@ function TripPage() {
             <p className="eyebrow">Activities</p>
             <h2 className="font-display text-3xl mt-3">What you'll do</h2>
             <ul className="mt-6 space-y-3">
-              {trip.activities.map((a, i) => (
+              {trip.activities.map((a: string, i: number) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="mt-1 h-2 w-2 rounded-full bg-[color:var(--trail-green)] shrink-0" />
                   <span className="text-[color:var(--charcoal)]/80">{a}</span>
@@ -202,7 +202,7 @@ function TripPage() {
             <p className="eyebrow">Included</p>
             <h2 className="font-display text-3xl mt-3">In the price</h2>
             <ul className="mt-6 space-y-3">
-              {trip.included.map((a, i) => (
+              {trip.included.map((a: string, i: number) => (
                 <li
                   key={i}
                   className="flex items-start gap-3 text-[color:var(--charcoal)]/80"
@@ -219,7 +219,7 @@ function TripPage() {
             </p>
             <h2 className="font-display text-3xl mt-3">You'll cover</h2>
             <ul className="mt-6 space-y-3">
-              {trip.notIncluded.map((a, i) => (
+              {trip.notIncluded.map((a: string, i: number) => (
                 <li
                   key={i}
                   className="flex items-start gap-3 text-[color:var(--charcoal)]/70"
