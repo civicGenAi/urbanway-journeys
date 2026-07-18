@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SearchOverlay } from "./SearchOverlay";
 
 const links = [
   { to: "/", label: "Home" },
@@ -14,6 +15,7 @@ const links = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const location = useLocation();
   const overHero = location.pathname === "/" && !scrolled;
 
@@ -61,9 +63,18 @@ export function Navbar() {
             })}
           </nav>
 
-          <Link to="/services" className="hidden md:inline-flex btn-primary text-sm py-3 px-5">
-            Plan Your Safari <ArrowUpRight className="h-4 w-4" />
-          </Link>
+          <div className="hidden md:flex items-center gap-5">
+            <button
+              aria-label="Search"
+              onClick={() => setSearchOpen(true)}
+              className={`${textColor} opacity-80 hover:opacity-100 transition-opacity`}
+            >
+              <Search className="h-5 w-5" />
+            </button>
+            <Link to="/services" className="btn-primary text-sm py-3 px-5">
+              Plan Your Safari <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
 
           <button
             aria-label="Toggle menu"
@@ -107,6 +118,21 @@ export function Navbar() {
               Way
             </div>
 
+            <motion.button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setSearchOpen(true);
+              }}
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.25, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="relative mb-10 inline-flex items-center gap-3 self-start rounded-full border border-white/25 px-5 py-3 text-white/85"
+            >
+              <Search className="h-4 w-4" />
+              <span className="text-sm font-medium">Search the site</span>
+            </motion.button>
+
             <ul className="relative space-y-6">
               {links.map((l, i) => (
                 <motion.li
@@ -134,6 +160,8 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
-import { ArrowUpRight, Play, Star } from "lucide-react";
+import { ArrowUpRight, MessageCircle, Star } from "lucide-react";
 import { IMAGES } from "../lib/images";
 import { Reveal, RevealStagger, RevealChild, SplitHeading } from "../components/Reveal";
 import { JourneyRoad } from "../components/JourneyRoad";
@@ -174,9 +174,9 @@ function Hero() {
           <Link to="/services" className="btn-primary" data-cursor="Book">
             Explore Safaris <ArrowUpRight className="h-4 w-4" />
           </Link>
-          <button className="btn-ghost" data-cursor="Play">
-            <Play className="h-4 w-4" /> Watch Our Story
-          </button>
+          <Link to="/bookings" className="btn-ghost" data-cursor="Book">
+            <MessageCircle className="h-4 w-4" /> Plan With Us
+          </Link>
         </Reveal>
 
         <div className="mt-16 border-t border-white/20 pt-8">
