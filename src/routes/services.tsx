@@ -1,10 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Leaf, ArrowUpRight, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IMAGES } from "../lib/images";
 import { Reveal, SplitHeading } from "../components/Reveal";
 import { toast } from "sonner";
+import type { Category } from "../lib/trips";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -35,18 +36,26 @@ export const Route = createFileRoute("/services")({
   component: Services,
 });
 
-const SERVICES = [
+const SERVICES: {
+  title: string;
+  blurb: string;
+  inc: string[];
+  img: string;
+  catalog?: Category["slug"];
+}[] = [
   {
     title: "Wildlife Safari Tours",
     blurb: "Multi-day expeditions across Serengeti, Ngorongoro Crater and Tarangire, tailored to your pace.",
     inc: ["Private licensed guide", "Modern 4x4 with roof hatches", "All park fees included"],
     img: IMAGES.lion,
+    catalog: "wildlife-safaris",
   },
   {
     title: "Airport Transfers",
     blurb: "Reliable pickups from Kilimanjaro (JRO), Arusha (ARK) and Zanzibar. On time, always.",
     inc: ["Flight tracking", "Meet and greet with name board", "Cold water and Wi-Fi on board"],
     img: IMAGES.fleet,
+    catalog: "airport-transfers",
   },
   {
     title: "City Tours",
@@ -65,12 +74,14 @@ const SERVICES = [
     blurb: "Late model Land Cruisers and Rav4s with or without a driver. Self-drive with 24/7 support.",
     inc: ["Full comprehensive insurance", "Rooftop tents on request", "Nationwide breakdown cover"],
     img: IMAGES.vehicle,
+    catalog: "car-hire",
   },
   {
     title: "Day Trips & Cultural Tours",
     blurb: "Materuni waterfalls, coffee farms, Maasai bomas, Lake Duluti canoeing.",
     inc: ["Community-owned experiences", "Traditional lunch included", "Small group sizes"],
     img: IMAGES.masai,
+    catalog: "day-trips",
   },
   {
     title: "Hotel Transfers",
@@ -146,13 +157,24 @@ function Services() {
                       ))}
                     </ul>
                     <Reveal delay={0.5} className="mt-10">
-                      <button
-                        onClick={() => { setSent(false); setModal(s.title); }}
-                        className="btn-primary"
-                        data-cursor="Book"
-                      >
-                        Request This Service <ArrowUpRight className="h-4 w-4" />
-                      </button>
+                      {s.catalog ? (
+                        <Link
+                          to="/services/$category"
+                          params={{ category: s.catalog }}
+                          className="btn-primary"
+                          data-cursor="View"
+                        >
+                          Explore {s.title.split(" ")[0]} Options <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      ) : (
+                        <button
+                          onClick={() => { setSent(false); setModal(s.title); }}
+                          className="btn-primary"
+                          data-cursor="Book"
+                        >
+                          Request This Service <ArrowUpRight className="h-4 w-4" />
+                        </button>
+                      )}
                     </Reveal>
                   </div>
                 </div>

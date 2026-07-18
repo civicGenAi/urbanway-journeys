@@ -296,11 +296,16 @@ function CityToWild() {
 }
 
 function FeaturedServices() {
-  const services = [
-    { title: "Wildlife Safaris", copy: "Serengeti, Ngorongoro, Tarangire. Private guides, unhurried days.", img: IMAGES.lion },
-    { title: "Airport Transfers", copy: "JRO to Arusha and beyond. On time, air-conditioned, tracked.", img: IMAGES.fleet },
-    { title: "Day Trips & Cultural Tours", copy: "Materuni waterfalls, coffee farms, Maasai villages.", img: IMAGES.masai },
-    { title: "Car Hire", copy: "Modern Land Cruisers with a driver, or self-drive with support.", img: IMAGES.vehicle },
+  const services: {
+    title: string;
+    copy: string;
+    img: string;
+    slug: "wildlife-safaris" | "airport-transfers" | "day-trips" | "car-hire";
+  }[] = [
+    { title: "Wildlife Safaris", copy: "Serengeti, Ngorongoro, Tarangire. Private guides, unhurried days.", img: IMAGES.lion, slug: "wildlife-safaris" },
+    { title: "Airport Transfers", copy: "JRO to Arusha and beyond. On time, air-conditioned, tracked.", img: IMAGES.fleet, slug: "airport-transfers" },
+    { title: "Day Trips & Cultural Tours", copy: "Materuni waterfalls, coffee farms, Maasai villages.", img: IMAGES.masai, slug: "day-trips" },
+    { title: "Car Hire", copy: "Modern Land Cruisers with a driver, or self-drive with support.", img: IMAGES.vehicle, slug: "car-hire" },
   ];
   return (
     <section className="py-28 md:py-40 bg-[color:var(--savanna-sand)]">
@@ -315,17 +320,31 @@ function FeaturedServices() {
         <RevealStagger className="grid gap-6 md:grid-cols-2">
           {services.map((s, i) => (
             <RevealChild key={i} className="group relative overflow-hidden rounded-2xl bg-white" >
-              <div className="aspect-[16/10] img-treat" data-cursor="View">
+              <Link
+                to="/services/$category"
+                params={{ category: s.slug }}
+                className="block aspect-[16/10] img-treat"
+                data-cursor="View"
+              >
                 <img src={s.img} alt={s.title} />
-              </div>
+              </Link>
               <div className="p-8 flex items-start justify-between gap-6">
                 <div>
-                  <h3 className="font-display text-3xl">{s.title}</h3>
+                  <h3 className="font-display text-3xl">
+                    <Link
+                      to="/services/$category"
+                      params={{ category: s.slug }}
+                      className="link-slide"
+                    >
+                      {s.title}
+                    </Link>
+                  </h3>
                   <p className="mt-3 text-[color:var(--charcoal)]/70 max-w-sm">{s.copy}</p>
                 </div>
                 <Link
-                  to="/services"
-                  aria-label={`Learn about ${s.title}`}
+                  to="/services/$category"
+                  params={{ category: s.slug }}
+                  aria-label={`Explore ${s.title}`}
                   className="mt-2 h-12 w-12 shrink-0 rounded-full bg-[color:var(--forest-deep)] text-white flex items-center justify-center transition-transform duration-500 group-hover:rotate-45"
                 >
                   <ArrowUpRight className="h-5 w-5" />
