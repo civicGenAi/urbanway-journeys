@@ -5,6 +5,7 @@ import {
   Check,
   ChevronLeft,
   Clock,
+  Download,
   MapPin,
   Minus,
   Plus,
@@ -122,11 +123,13 @@ function TripPage() {
   const [activeImg, setActiveImg] = useState(0);
   const [confirmation, setConfirmation] = useState<null | {
     ref: string;
+    name: string;
     total: number;
     paid: number;
     mode: "full" | "half" | "negotiate";
     email: string;
     phone: string;
+    rows: { label: string; qty: number; lineTotal: number }[];
   }>(null);
 
   return (
@@ -339,11 +342,13 @@ function BookingForm({
   pricePerPerson: number;
   onConfirmed: (c: {
     ref: string;
+    name: string;
     total: number;
     paid: number;
     mode: "full" | "half" | "negotiate";
     email: string;
     phone: string;
+    rows: { label: string; qty: number; lineTotal: number }[];
   }) => void;
 }) {
   const [name, setName] = useState("");
@@ -447,11 +452,15 @@ function BookingForm({
         Math.floor(100000 + Math.random() * 899999);
       onConfirmed({
         ref,
+        name,
         total: totals.total,
         paid: totals.payable,
         mode,
         email,
         phone: `${countryCode} ${phone}`,
+        rows: totals.rows
+          .filter((r) => r.qty > 0)
+          .map((r) => ({ label: r.band.label, qty: r.qty, lineTotal: r.lineTotal })),
       });
       toast.success(
         `Payment simulated. Receipt sent to ${email} and SMS to ${countryCode} ${phone}.`,
@@ -769,16 +778,32 @@ function Receipt({
 }: {
   data: {
     ref: string;
+    name: string;
     total: number;
     paid: number;
     mode: "full" | "half" | "negotiate";
     email: string;
     phone: string;
+    rows: { label: string; qty: number; lineTotal: number }[];
   };
   trip: { title: string; location: string; duration: string };
   onClose: () => void;
 }) {
   const balance = data.total - data.paid;
+  const [downloading, setDownloading] = useState(false);
+
+  async function handleDownload() {
+    setDownloading(true);
+    try {
+      const { downloadReceiptPdf } = await import("../lib/receiptPdf");
+      await downloadReceiptPdf({ ...data, trip });
+    } catch {
+      toast.error("Could not generate the PDF. Please try again.");
+    } finally {
+      setDownloading(false);
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -870,8 +895,17 @@ function Receipt({
           </div>
 
           <button
+            onClick={handleDownload}
+            disabled={downloading}
+            className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 rounded-full border border-black/15 text-[color:var(--charcoal)] font-semibold text-sm hover:bg-black/5 transition-colors mt-8 disabled:opacity-50"
+          >
+            {downloading ? "Preparing PDF..." : "Download PDF Receipt"}
+            {!downloading && <Download className="h-4 w-4" />}
+          </button>
+
+          <button
             onClick={onClose}
-            className="btn-primary w-full justify-center mt-8"
+            className="btn-primary w-full justify-center mt-3"
           >
             Karibu Tanzania
           </button>
