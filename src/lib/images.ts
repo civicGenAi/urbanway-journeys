@@ -31,4 +31,14 @@ export const IMAGES = {
   bubbleWaterfall: "/pictures-events/bubble-waterfall.webp",
   bubbleCoffee: "/pictures-events/bubble-coffee.webp",
   bubbleGiraffe: "/pictures-events/bubble-giraffe.webp",
+
+  // CityToWild scroll chapters: distinct mobile/desktop crops per chapter
+  chapterCityMobile: "/pictures-events/chapter-city-mobile.webp",
+  chapterCityDesktop: "/pictures-events/chapter-city-desktop.webp",
+  chapterCoffeeMobile: "/pictures-events/chapter-coffee-mobile.webp",
+  chapterCoffeeDesktop: "/pictures-events/chapter-coffee-desktop.webp",
+  chapterFallsMobile: "/pictures-events/chapter-falls-mobile.webp",
+  chapterFallsDesktop: "/pictures-events/chapter-falls-desktop.webp",
+  chapterWildMobile: "/pictures-events/chapter-wild-mobile.webp",
+  chapterWildDesktop: "/pictures-events/chapter-wild-desktop.webp",
 };

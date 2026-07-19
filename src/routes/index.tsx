@@ -314,9 +314,30 @@ function CityToWild() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
   const panels = [
-    { img: IMAGES.city, word: "City", copy: "Begin in Arusha. Modern comfort, real coffee, warm welcomes." },
-    { img: IMAGES.road, word: "Road", copy: "A quiet drive north. Acacia shadows lengthen across the tarmac." },
-    { img: IMAGES.elephant, word: "Wild", copy: "You arrive. The herd is already there, and so are the stars tonight." },
+    {
+      mobileImg: IMAGES.chapterCityMobile,
+      desktopImg: IMAGES.chapterCityDesktop,
+      word: "City",
+      copy: "Begin in Arusha. Modern comfort, real coffee, warm welcomes.",
+    },
+    {
+      mobileImg: IMAGES.chapterCoffeeMobile,
+      desktopImg: IMAGES.chapterCoffeeDesktop,
+      word: "Coffee",
+      copy: "Pause in the highlands. Hand-picked cherries, roasted the old way, shared over conversation.",
+    },
+    {
+      mobileImg: IMAGES.chapterFallsMobile,
+      desktopImg: IMAGES.chapterFallsDesktop,
+      word: "Falls",
+      copy: "Wind through rainforest trails to waterfalls only the locals know.",
+    },
+    {
+      mobileImg: IMAGES.chapterWildMobile,
+      desktopImg: IMAGES.chapterWildDesktop,
+      word: "Wild",
+      copy: "You arrive. The herd is already there, and so are the stars tonight.",
+    },
   ];
 
   return (
@@ -333,12 +354,15 @@ function CityToWild() {
           const scale = useTransform(scrollYProgress, [start, end], [1.08, 1]);
           return (
             <motion.div key={i} style={{ opacity }} className="absolute inset-0">
-              <motion.img
-                style={{ scale }}
-                src={p.img}
-                alt={p.word}
-                className="h-full w-full object-cover"
-              />
+              <picture>
+                <source media="(min-width: 768px)" srcSet={p.desktopImg} />
+                <motion.img
+                  style={{ scale }}
+                  src={p.mobileImg}
+                  alt={p.word}
+                  className="h-full w-full object-cover"
+                />
+              </picture>
               <div className="absolute inset-0 bg-black/45" />
               <div className="absolute inset-0 container-lodge flex flex-col justify-center">
                 <p className="eyebrow !text-white/70">Chapter 0{i + 1}</p>
