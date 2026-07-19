@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
 import { ArrowUpRight, MessageCircle, Star } from "lucide-react";
-import { IMAGES, HERO_SLIDES } from "../lib/images";
+import { IMAGES } from "../lib/images";
 import { Reveal, RevealStagger, RevealChild, SplitHeading } from "../components/Reveal";
 import { JourneyRoad } from "../components/JourneyRoad";
 
@@ -139,32 +139,6 @@ function HeroStatCarousel() {
   );
 }
 
-function HeroSlideshow() {
-  const [active, setActive] = useState(0);
-  useEffect(() => {
-    const t = setInterval(() => {
-      setActive((i) => (i + 1) % HERO_SLIDES.length);
-    }, 5500);
-    return () => clearInterval(t);
-  }, []);
-
-  return (
-    <>
-      {HERO_SLIDES.map((slide, i) => (
-        <motion.img
-          key={slide.src}
-          src={slide.src}
-          alt={slide.alt}
-          className="absolute inset-0 h-full w-full object-cover"
-          initial={false}
-          animate={{ opacity: i === active ? 1 : 0 }}
-          transition={{ duration: 1.8, ease: [0.4, 0, 0.2, 1] }}
-        />
-      ))}
-    </>
-  );
-}
-
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -174,7 +148,7 @@ function Hero() {
   return (
     <section ref={ref} className="relative h-screen overflow-hidden text-white">
       <motion.div style={{ y, scale }} className="absolute inset-0">
-        <HeroSlideshow />
+        <img src={IMAGES.heroSavanna} alt="Golden hour over the Tanzanian savanna with Kilimanjaro on the horizon" className="h-full w-full object-cover" />
       </motion.div>
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-[color:var(--forest-deep)]/85" />
 

@@ -25,12 +25,3 @@ export const IMAGES = {
   landscape1: img("photo-1547471080-7cc2caa01a7e", 1200),
   landscape2: img("photo-1516426122078-c23e76319801", 1200),
 };
-
-// Real guest photos, used for the rotating homepage hero background.
-export const HERO_SLIDES: { src: string; alt: string }[] = [
-  { src: "/pictures-events/hero-chemka.webp", alt: "Guest swinging over the water at Chemka hot springs" },
-  { src: "/pictures-events/hero-coffee-tour.webp", alt: "Family group on a coffee farm tour near Moshi" },
-  { src: "/pictures-events/hero-waterfalls.webp", alt: "Materuni-area waterfall framed by rainforest" },
-  { src: "/pictures-events/hero-giraffe.webp", alt: "Guest close to giraffes on the Serengeti plains" },
-  { src: "/pictures-events/hero-savanna.webp", alt: "Oryx antelope on the Tanzanian savanna" },
-];
