@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { IMAGES } from "../lib/images";
@@ -38,16 +38,19 @@ const GALLERY_HEADLINES = [
 
 type Photo = { src: string; alt: string };
 
-const CHAPTERS: { number: string; title: string; place: string; blurb: string; photos: [Photo, Photo, Photo] }[] = [
+const CHAPTERS: { number: string; title: string; place: string; blurb: string; pool: Photo[] }[] = [
   {
     number: "01",
     title: "The Hidden Springs",
     place: "Chemka Hot Springs",
     blurb: "A hot spring hidden in the palms outside Moshi. Swing in, float out, and let the current do the rest.",
-    photos: [
+    pool: [
       { src: IMAGES.galChemka1, alt: "Aerial view of a guest floating in Chemka hot springs" },
       { src: IMAGES.galChemka2, alt: "Clear turquoise water at Chemka hot springs" },
       { src: IMAGES.galChemka3, alt: "Guest swinging over the water at Chemka" },
+      { src: IMAGES.galChemka4, alt: "Guest floating with an inner tube at Chemka" },
+      { src: IMAGES.galChemka5, alt: "Guest smiling in the water at Chemka" },
+      { src: IMAGES.galChemka6, alt: "Guest swimming at Chemka hot springs" },
     ],
   },
   {
@@ -55,10 +58,13 @@ const CHAPTERS: { number: string; title: string; place: string; blurb: string; p
     title: "Bean to Cup",
     place: "Coffee Tour, Materuni",
     blurb: "A morning on a family coffee farm — hand-picked cherries, an old iron grinder, and a cup earned the slow way.",
-    photos: [
+    pool: [
       { src: IMAGES.galCoffee1, alt: "Local host handing coffee to a guest" },
       { src: IMAGES.galCoffee2, alt: "Hands-on coffee cherry processing" },
       { src: IMAGES.galCoffee3, alt: "Local guide showing a guest the coffee grinder" },
+      { src: IMAGES.galCoffee4, alt: "Coffee cherries ripening on the branch" },
+      { src: IMAGES.galCoffee5, alt: "Guests holding a hand-carved coffee tray" },
+      { src: IMAGES.galCoffee6, alt: "Guests enjoying coffee at a rustic farm table" },
     ],
   },
   {
@@ -66,10 +72,12 @@ const CHAPTERS: { number: string; title: string; place: string; blurb: string; p
     title: "Materuni Falls",
     place: "Materuni Village",
     blurb: "An 80-metre waterfall at the end of a rainforest trail, with Kilimanjaro's foothills at your back.",
-    photos: [
+    pool: [
       { src: IMAGES.galMateruni1, alt: "Distant view of Materuni waterfall in a lush valley" },
       { src: IMAGES.galMateruni2, alt: "Guests admiring Materuni waterfall" },
       { src: IMAGES.galMateruni3, alt: "Guest smiling on the Materuni trail" },
+      { src: IMAGES.galMateruni4, alt: "Materuni waterfall framed by rainforest" },
+      { src: IMAGES.galMateruni5, alt: "Guests smiling in front of Materuni waterfall" },
     ],
   },
   {
@@ -77,10 +85,14 @@ const CHAPTERS: { number: string; title: string; place: string; blurb: string; p
     title: "Off the Beaten Path",
     place: "Napuru Falls",
     blurb: "Fewer crowds, same magic. A quieter waterfall trek through forest streams and volcanic rock.",
-    photos: [
+    pool: [
       { src: IMAGES.galNapuru1, alt: "Tall waterfall framed by rainforest at Napuru" },
       { src: IMAGES.galNapuru2, alt: "Guests walking along a forest stream" },
       { src: IMAGES.galNapuru3, alt: "Local guide playing in the water at Napuru" },
+      { src: IMAGES.galNapuru4, alt: "Guests on a quad bike ride through the forest" },
+      { src: IMAGES.galNapuru5, alt: "Guests riding quad bikes on the trail" },
+      { src: IMAGES.galNapuru6, alt: "Two guests at the base of Napuru waterfall" },
+      { src: IMAGES.galNapuru7, alt: "Guests playing in the stream at Napuru" },
     ],
   },
   {
@@ -88,16 +100,23 @@ const CHAPTERS: { number: string; title: string; place: string; blurb: string; p
     title: "Close Encounters",
     place: "Giraffe & Wildlife Feeding",
     blurb: "Hand-feed a giraffe, share a paddock with zebra, and meet a few residents you won't find in any brochure.",
-    photos: [
+    pool: [
       { src: IMAGES.galGiraffe1, alt: "Local guide with a giraffe leaning down" },
       { src: IMAGES.galGiraffe2, alt: "Guest feeding a giraffe" },
       { src: IMAGES.galGiraffe3, alt: "Guest with a white lion on a lodge porch" },
+      { src: IMAGES.galGiraffe4, alt: "Guests sharing breakfast with giraffes at golden hour" },
+      { src: IMAGES.galGiraffe5, alt: "Guest feeding giraffes in the wild" },
+      { src: IMAGES.galGiraffe6, alt: "Guest with zebras in the Serengeti" },
+      { src: IMAGES.galGiraffe7, alt: "Guest feeding eland antelope" },
+      { src: IMAGES.galGiraffe8, alt: "Guest feeding a giraffe in the savanna" },
+      { src: IMAGES.galGiraffe9, alt: "Guests at a picnic table surrounded by giraffes and zebra" },
+      { src: IMAGES.galGiraffe10, alt: "Guests seated among zebras and giraffes" },
     ],
   },
 ];
 
 const ALL_PHOTOS: (Photo & { place: string })[] = CHAPTERS.flatMap((c) =>
-  c.photos.map((p) => ({ ...p, place: c.place }))
+  c.pool.map((p) => ({ ...p, place: c.place }))
 );
 
 function GalleryHeadline() {
@@ -113,6 +132,43 @@ function GalleryHeadline() {
       </motion.div>
     </AnimatePresence>
   );
+}
+
+/** Rotates exactly one of three "slots" at a time through a photo pool, always
+ * choosing the next pool item not currently shown in either of the other two
+ * slots -- so a chapter can never show the same photo twice at once. */
+function useChapterSlots(poolLength: number, intervalMs = 2800): number[] {
+  const [slots, setSlots] = useState<number[]>(() => {
+    if (poolLength <= 1) return [0, 0, 0];
+    if (poolLength === 2) return [0, 1, 0];
+    return [0, Math.floor(poolLength / 3), Math.floor((2 * poolLength) / 3)];
+  });
+  const turnRef = useRef(0);
+
+  useEffect(() => {
+    if (poolLength <= 3) return;
+    const t = setInterval(() => {
+      setSlots((prev) => {
+        const changing = turnRef.current % 3;
+        turnRef.current += 1;
+        const used = new Set(prev);
+        let nextValue = prev[changing];
+        for (let step = 1; step <= poolLength; step++) {
+          const candidate = (prev[changing] + step) % poolLength;
+          if (!used.has(candidate)) {
+            nextValue = candidate;
+            break;
+          }
+        }
+        const copy = [...prev];
+        copy[changing] = nextValue;
+        return copy;
+      });
+    }, intervalMs);
+    return () => clearInterval(t);
+  }, [poolLength, intervalMs]);
+
+  return slots;
 }
 
 function PolaroidPhoto({
@@ -140,8 +196,20 @@ function PolaroidPhoto({
       className={`relative bg-white p-2.5 pb-8 shadow-[0_20px_45px_rgba(23,24,26,0.18)] ${tall ? "row-span-2" : ""}`}
       data-cursor="View"
     >
-      <div className={`overflow-hidden ${tall ? "h-full" : "aspect-[3/4]"}`}>
-        <img src={photo.src} alt={photo.alt} loading="lazy" className="h-full w-full object-cover" />
+      <div className={`relative overflow-hidden ${tall ? "h-full" : "aspect-[3/4]"}`}>
+        <AnimatePresence initial={false}>
+          <motion.img
+            key={photo.src}
+            src={photo.src}
+            alt={photo.alt}
+            loading="lazy"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.9, ease: EASE }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </AnimatePresence>
       </div>
     </motion.button>
   );
@@ -157,6 +225,8 @@ function ChapterSection({
   onOpen: (src: string) => void;
 }) {
   const flipped = index % 2 === 1;
+  const slots = useChapterSlots(chapter.pool.length);
+
   return (
     <section className={`py-20 md:py-28 ${index % 2 === 0 ? "bg-[color:var(--kilimanjaro-snow)]" : "bg-white"}`}>
       <div className="container-lodge grid gap-12 md:grid-cols-12 items-center">
@@ -168,9 +238,9 @@ function ChapterSection({
         </div>
         <div className={`md:col-span-7 ${flipped ? "md:order-1" : ""}`}>
           <div className="grid grid-cols-2 gap-5 sm:gap-6 max-w-sm sm:max-w-md mx-auto md:max-w-none">
-            <PolaroidPhoto photo={chapter.photos[0]} onOpen={onOpen} rotate={-2} delay={0} tall />
-            <PolaroidPhoto photo={chapter.photos[1]} onOpen={onOpen} rotate={2.5} delay={0.15} />
-            <PolaroidPhoto photo={chapter.photos[2]} onOpen={onOpen} rotate={-1.5} delay={0.3} />
+            <PolaroidPhoto photo={chapter.pool[slots[0]]} onOpen={onOpen} rotate={-2} delay={0} tall />
+            <PolaroidPhoto photo={chapter.pool[slots[1]]} onOpen={onOpen} rotate={2.5} delay={0.15} />
+            <PolaroidPhoto photo={chapter.pool[slots[2]]} onOpen={onOpen} rotate={-1.5} delay={0.3} />
           </div>
         </div>
       </div>
@@ -188,7 +258,27 @@ function Gallery() {
   return (
     <>
       <section className="relative h-[60vh] min-h-[440px] overflow-hidden text-white">
-        <img src={IMAGES.galleryHero} alt="Chemka hot springs, Tanzania" className="absolute inset-0 h-full w-full object-cover" />
+        {/* Mobile: plain cover -- already sharp, since the viewport is well within the source's native width */}
+        <img
+          src={IMAGES.galleryHero}
+          alt="Chemka hot springs, Tanzania"
+          className="md:hidden absolute inset-0 h-full w-full object-cover"
+        />
+        {/* Desktop: sharp contained image over a blurred edge-fill backdrop, so the focal image is never upscaled */}
+        <div className="hidden md:block absolute inset-0">
+          <img
+            src={IMAGES.galleryHero}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl brightness-75"
+          />
+          <img
+            src={IMAGES.galleryHero}
+            alt="Chemka hot springs, Tanzania"
+            className="absolute inset-0 h-full w-full object-contain"
+          />
+        </div>
+
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-[color:var(--forest-deep)]/80" />
         <div className="relative container-lodge h-full flex flex-col justify-end pb-16 pt-32">
           <p className="eyebrow !text-white/80">Field notebook</p>
