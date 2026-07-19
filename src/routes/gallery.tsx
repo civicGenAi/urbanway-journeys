@@ -261,12 +261,14 @@ function Gallery() {
 
   return (
     <>
-      <section className="relative h-[70vh] min-h-[560px] overflow-hidden text-white">
-        {/* True landscape source (4232x2821) -- plain cover looks sharp at any width, no contain/blur workaround needed */}
+      <section className="relative h-[82vh] min-h-[620px] overflow-hidden text-white">
+        {/* True landscape source (4232x2821) -- plain cover looks sharp at any width, no contain/blur workaround needed.
+            The subjects fill almost the full height of the source (headscarves near the top, hands in the sand near
+            the bottom), so bias the crop down a little to keep the digging action in frame rather than centering. */}
         <img
           src={IMAGES.galleryHero}
           alt="Local women gathering seaweed on a Zanzibar beach at golden hour"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover object-[center_68%]"
         />
 
         {/* Light touch: keeps the text legible without drowning out the photo's colour */}
