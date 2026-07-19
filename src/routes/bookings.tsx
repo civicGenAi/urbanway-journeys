@@ -41,7 +41,7 @@ const FAQ = [
 function PlanWithUs() {
   return (
     <>
-      <section className="relative h-[62vh] min-h-[500px] overflow-hidden text-white">
+      <section className="relative min-h-[420px] md:h-[62vh] md:min-h-[500px] overflow-hidden text-white">
         <img src={IMAGES.ngorongoro} alt="Ngorongoro Crater rim at first light" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--forest-deep)]/85 via-[color:var(--forest-deep)]/35 to-[color:var(--forest-deep)]/10" />
         <div className="relative container-lodge h-full flex flex-col justify-end pb-14 pt-32">
