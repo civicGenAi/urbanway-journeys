@@ -258,26 +258,12 @@ function Gallery() {
   return (
     <>
       <section className="relative h-[60vh] min-h-[440px] overflow-hidden text-white">
-        {/* Mobile: plain cover -- already sharp, since the viewport is well within the source's native width */}
+        {/* True landscape source (4232x2821) -- plain cover looks sharp at any width, no contain/blur workaround needed */}
         <img
           src={IMAGES.galleryHero}
-          alt="Chemka hot springs, Tanzania"
-          className="md:hidden absolute inset-0 h-full w-full object-cover"
+          alt="Local women gathering seaweed on a Zanzibar beach at golden hour"
+          className="absolute inset-0 h-full w-full object-cover"
         />
-        {/* Desktop: sharp contained image over a blurred edge-fill backdrop, so the focal image is never upscaled */}
-        <div className="hidden md:block absolute inset-0">
-          <img
-            src={IMAGES.galleryHero}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl brightness-75"
-          />
-          <img
-            src={IMAGES.galleryHero}
-            alt="Chemka hot springs, Tanzania"
-            className="absolute inset-0 h-full w-full object-contain"
-          />
-        </div>
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-[color:var(--forest-deep)]/80" />
         <div className="relative container-lodge h-full flex flex-col justify-end pb-16 pt-32">
