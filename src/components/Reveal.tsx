@@ -1,5 +1,5 @@
-import { motion, useInView } from "framer-motion";
-import { useRef, type ReactNode } from "react";
+import { motion, useInView, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect, type ReactNode } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -125,5 +125,33 @@ export function SplitHeading({
         ))}
       </span>
     </Tag>
+  );
+}
+
+/** Cycles a hero heading through several phrases, reusing SplitHeading's
+ * reveal-per-word animation on every rotation. Same pattern as Gallery's
+ * headline, extracted so other hero sections can share it. */
+export function CyclingHeadline({
+  phrases,
+  intervalMs = 4600,
+  as = "h1",
+  className,
+}: {
+  phrases: string[];
+  intervalMs?: number;
+  as?: "h1" | "h2" | "h3" | "p";
+  className?: string;
+}) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setI((x) => (x + 1) % phrases.length), intervalMs);
+    return () => clearInterval(t);
+  }, [phrases.length, intervalMs]);
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div key={i} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
+        <SplitHeading as={as} className={className} text={phrases[i]} />
+      </motion.div>
+    </AnimatePresence>
   );
 }

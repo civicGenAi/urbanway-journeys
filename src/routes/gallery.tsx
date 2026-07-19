@@ -261,7 +261,7 @@ function Gallery() {
 
   return (
     <>
-      <section className="relative h-[82vh] min-h-[620px] overflow-hidden text-white">
+      <section className="relative h-[62vh] min-h-[500px] overflow-hidden text-white">
         {/* True landscape source (4232x2821) -- plain cover looks sharp at any width, no contain/blur workaround needed.
             The subjects fill almost the full height of the source (headscarves near the top, hands in the sand near
             the bottom), so bias the crop down a little to keep the digging action in frame rather than centering. */}

@@ -3,9 +3,16 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus, MessageCircle, Check } from "lucide-react";
 import { IMAGES } from "../lib/images";
-import { SplitHeading, Reveal } from "../components/Reveal";
+import { SplitHeading, Reveal, CyclingHeadline } from "../components/Reveal";
 import { toast } from "sonner";
 import { CATEGORIES, COUNTRY_CODES, buildWhatsAppUrl } from "../lib/trips";
+
+const PLAN_HEADLINES = [
+  "Let's Plan It Together",
+  "Tell Us What You Have in Mind",
+  "Your Trip, Your Way",
+  "We'll Handle the Rest",
+];
 
 export const Route = createFileRoute("/bookings")({
   head: () => ({
@@ -34,12 +41,15 @@ const FAQ = [
 function PlanWithUs() {
   return (
     <>
-      <section className="relative h-[50vh] min-h-[380px] overflow-hidden text-white">
+      <section className="relative h-[62vh] min-h-[500px] overflow-hidden text-white">
         <img src={IMAGES.ngorongoro} alt="Ngorongoro Crater rim at first light" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-[color:var(--forest-deep)]/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--forest-deep)]/85 via-[color:var(--forest-deep)]/35 to-[color:var(--forest-deep)]/10" />
         <div className="relative container-lodge h-full flex flex-col justify-end pb-14 pt-32">
-          <p className="eyebrow !text-white/80">Not sure where to start?</p>
-          <SplitHeading as="h1" className="display-hero mt-3 !text-white max-w-3xl" text="Let's Plan It Together" />
+          <p className="eyebrow !text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">Not sure where to start?</p>
+          <CyclingHeadline
+            phrases={PLAN_HEADLINES}
+            className="mt-3 !text-white font-display font-medium leading-[1.05] max-w-3xl text-[clamp(2.2rem,4.8vw,4.25rem)] [text-shadow:0_4px_30px_rgba(0,0,0,0.45)]"
+          />
           <Reveal delay={0.3} className="mt-4 max-w-xl text-white/85 text-lg">
             Already know which trip you want?{" "}
             <Link to="/services" className="underline underline-offset-4 hover:text-white">

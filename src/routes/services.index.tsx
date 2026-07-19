@@ -3,9 +3,16 @@ import { useState } from "react";
 import { Leaf, ArrowUpRight, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IMAGES } from "../lib/images";
-import { Reveal, SplitHeading } from "../components/Reveal";
+import { Reveal, SplitHeading, CyclingHeadline } from "../components/Reveal";
 import { toast } from "sonner";
 import { CATEGORIES, tripsInCategory, formatUsd, buildWhatsAppUrl } from "../lib/trips";
+
+const SERVICES_HEADLINES = [
+  "Nine ways to experience Tanzania",
+  "Safaris, transfers, and custom trips",
+  "One local team, every journey",
+  "Tell us where you want to go",
+];
 
 const QUOTE_SERVICES: { title: string; blurb: string; inc: string[]; img: string }[] = [
   {
@@ -106,7 +113,7 @@ function Services() {
         <div className="absolute inset-0 bg-[color:var(--charcoal)]/60" />
         <div className="relative container-lodge h-full flex flex-col justify-end pb-16 pt-32">
           <p className="eyebrow !text-white/80">What we offer</p>
-          <SplitHeading as="h1" className="display-hero mt-4 max-w-4xl !text-white" text="Nine ways to experience Tanzania" />
+          <CyclingHeadline phrases={SERVICES_HEADLINES} className="display-hero mt-4 max-w-4xl !text-white" />
         </div>
       </section>
 

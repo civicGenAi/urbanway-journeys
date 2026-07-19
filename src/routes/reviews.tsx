@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, ArrowUpRight } from "lucide-react";
 import { IMAGES } from "../lib/images";
-import { SplitHeading, Reveal, RevealStagger, RevealChild } from "../components/Reveal";
+import { SplitHeading, Reveal, RevealStagger, RevealChild, CyclingHeadline } from "../components/Reveal";
+
+const REVIEW_HEADLINES = [
+  "Stories Our Guests Tell",
+  "Words From the Road",
+  "Real Trips, Real Voices",
+  "128 Journeys, One Standard",
+];
 
 const REVIEWS = [
   { name: "Anja & Peter", country: "🇩🇪", flag: "Germany", trip: "Serengeti 5-day", date: "March 2026", stars: 5, text: "The most seamless safari we've ever taken. Our guide Emmanuel knew every bird call by name, and the vehicle was spotless every morning. UrbanWay set a new benchmark." },
@@ -56,13 +63,16 @@ export const Route = createFileRoute("/reviews")({
 function Reviews() {
   return (
     <>
-      <section className="relative h-[55vh] min-h-[420px] overflow-hidden text-white">
-        <img src={IMAGES.zebra} alt="Zebras in Serengeti" className="absolute inset-0 h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-[color:var(--forest-deep)]/75" />
+      <section className="relative h-[58vh] min-h-[440px] overflow-hidden text-white">
+        <img src={IMAGES.zebra} alt="A white lion resting in golden light" className="absolute inset-0 h-full w-full object-cover object-[center_38%]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--forest-deep)]/85 via-[color:var(--forest-deep)]/35 to-[color:var(--forest-deep)]/10" />
         <div className="relative container-lodge h-full grid md:grid-cols-2 items-end pb-16 pt-32 gap-10">
           <div>
-            <p className="eyebrow !text-white/80">Reviews</p>
-            <SplitHeading as="h1" className="display-hero mt-3 !text-white" text="Stories Our Guests Tell" />
+            <p className="eyebrow !text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">Reviews</p>
+            <CyclingHeadline
+              phrases={REVIEW_HEADLINES}
+              className="mt-3 !text-white font-display font-medium leading-[1.02] text-[clamp(2.4rem,5.2vw,4.75rem)] [text-shadow:0_4px_30px_rgba(0,0,0,0.45)]"
+            />
           </div>
           <div className="md:justify-self-end">
             <p className="font-display text-8xl md:text-9xl !text-white leading-none">4.9</p>
