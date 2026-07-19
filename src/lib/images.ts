@@ -44,4 +44,22 @@ export const IMAGES = {
   wildFlamingos: "/pictures-events/wild-flamingos.webp",
   wildPlay: "/pictures-events/wild-play.webp",
   wildCoast: "/pictures-events/wild-coast.webp",
+
+  // Gallery page hero + book-chapter photo sets
+  galleryHero: "/pictures-events/gallery-hero.webp",
+  galChemka1: "/pictures-events/gal-chemka-1.webp",
+  galChemka2: "/pictures-events/gal-chemka-2.webp",
+  galChemka3: "/pictures-events/gal-chemka-3.webp",
+  galCoffee1: "/pictures-events/gal-coffee-1.webp",
+  galCoffee2: "/pictures-events/gal-coffee-2.webp",
+  galCoffee3: "/pictures-events/gal-coffee-3.webp",
+  galMateruni1: "/pictures-events/gal-materuni-1.webp",
+  galMateruni2: "/pictures-events/gal-materuni-2.webp",
+  galMateruni3: "/pictures-events/gal-materuni-3.webp",
+  galNapuru1: "/pictures-events/gal-napuru-1.webp",
+  galNapuru2: "/pictures-events/gal-napuru-2.webp",
+  galNapuru3: "/pictures-events/gal-napuru-3.webp",
+  galGiraffe1: "/pictures-events/gal-giraffe-1.webp",
+  galGiraffe2: "/pictures-events/gal-giraffe-2.webp",
+  galGiraffe3: "/pictures-events/gal-giraffe-3.webp",
 };
