@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useInView, type MotionValue } from "framer-motion";
 import { ArrowUpRight, MessageCircle, Star } from "lucide-react";
 import { IMAGES } from "../lib/images";
 import { Reveal, RevealStagger, RevealChild, SplitHeading } from "../components/Reveal";
@@ -309,69 +309,96 @@ function Intro() {
   );
 }
 
+function ChapterPanel({
+  img,
+  word,
+  copy,
+  index,
+  count,
+  scrollYProgress,
+}: {
+  img: string;
+  word: string;
+  copy: string;
+  index: number;
+  count: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const start = index / count;
+  const end = (index + 1) / count;
+  const opacity = useTransform(
+    scrollYProgress,
+    [Math.max(0, start - 0.05), start, end - 0.05, end],
+    [0, 1, 1, 0]
+  );
+  const scale = useTransform(scrollYProgress, [start, end], [1.08, 1]);
+  return (
+    <motion.div style={{ opacity }} className="absolute inset-0">
+      <motion.img
+        style={{ scale }}
+        src={img}
+        alt={word}
+        loading="lazy"
+        className="h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 container-lodge flex flex-col justify-center">
+        <p className="eyebrow !text-white/70">Chapter 0{index + 1}</p>
+        <h3 className="font-display text-[clamp(4rem,14vw,14rem)] leading-none text-white mt-2">{word}</h3>
+        <p className="max-w-md text-lg text-white/85 mt-4">{copy}</p>
+      </div>
+    </motion.div>
+  );
+}
+
 function CityToWild() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
 
-  const panels = [
-    {
-      mobileImg: IMAGES.chapterCityMobile,
-      desktopImg: IMAGES.chapterCityDesktop,
-      word: "City",
-      copy: "Begin in Arusha. Modern comfort, real coffee, warm welcomes.",
-    },
-    {
-      mobileImg: IMAGES.chapterCoffeeMobile,
-      desktopImg: IMAGES.chapterCoffeeDesktop,
-      word: "Coffee",
-      copy: "Pause in the highlands. Hand-picked cherries, roasted the old way, shared over conversation.",
-    },
-    {
-      mobileImg: IMAGES.chapterFallsMobile,
-      desktopImg: IMAGES.chapterFallsDesktop,
-      word: "Falls",
-      copy: "Wind through rainforest trails to waterfalls only the locals know.",
-    },
-    {
-      mobileImg: IMAGES.chapterWildMobile,
-      desktopImg: IMAGES.chapterWildDesktop,
-      word: "Wild",
-      copy: "You arrive. The herd is already there, and so are the stars tonight.",
-    },
+  const mobilePanels = [
+    { img: IMAGES.chapterCityMobile, word: "City", copy: "Begin in Arusha. Modern comfort, real coffee, warm welcomes." },
+    { img: IMAGES.chapterCoffeeMobile, word: "Coffee", copy: "Pause in the highlands. Hand-picked cherries, roasted the old way, shared over conversation." },
+    { img: IMAGES.chapterFallsMobile, word: "Falls", copy: "Wind through rainforest trails to waterfalls only the locals know." },
+    { img: IMAGES.chapterWildMobile, word: "Wild", copy: "You arrive. The herd is already there, and so are the stars tonight." },
+  ];
+
+  const desktopPanels = [
+    { img: IMAGES.wildFamily, word: "Family", copy: "A cheetah and her cubs, unhurried in the morning grass." },
+    { img: IMAGES.wildTower, word: "Tower", copy: "A tower of giraffes, necks raised against an open sky." },
+    { img: IMAGES.wildFlamingos, word: "Flamingos", copy: "Thousands gather at dawn on the soda lakes, wings catching the first light." },
+    { img: IMAGES.wildPlay, word: "Play", copy: "Young and fearless. The forest is one big playground." },
+    { img: IMAGES.wildCoast, word: "Coast", copy: "Trade winds and dhow sails. Zanzibar's turquoise water waits at the end of the road." },
   ];
 
   return (
     <section ref={ref} className="relative bg-[color:var(--charcoal)] text-white h-[220vh] md:h-[300vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
-        {panels.map((p, i) => {
-          const start = i / panels.length;
-          const end = (i + 1) / panels.length;
-          const opacity = useTransform(
-            scrollYProgress,
-            [Math.max(0, start - 0.05), start, end - 0.05, end],
-            [0, 1, 1, 0]
-          );
-          const scale = useTransform(scrollYProgress, [start, end], [1.08, 1]);
-          return (
-            <motion.div key={i} style={{ opacity }} className="absolute inset-0">
-              <picture>
-                <source media="(min-width: 768px)" srcSet={p.desktopImg} />
-                <motion.img
-                  style={{ scale }}
-                  src={p.mobileImg}
-                  alt={p.word}
-                  className="h-full w-full object-cover"
-                />
-              </picture>
-              <div className="absolute inset-0 bg-black/45" />
-              <div className="absolute inset-0 container-lodge flex flex-col justify-center">
-                <p className="eyebrow !text-white/70">Chapter 0{i + 1}</p>
-                <h3 className="font-display text-[clamp(4rem,14vw,14rem)] leading-none text-white mt-2">{p.word}</h3>
-                <p className="max-w-md text-lg text-white/85 mt-4">{p.copy}</p>
-              </div>
-            </motion.div>
-          );
-        })}
+        <div className="md:hidden absolute inset-0">
+          {mobilePanels.map((p, i) => (
+            <ChapterPanel
+              key={i}
+              img={p.img}
+              word={p.word}
+              copy={p.copy}
+              index={i}
+              count={mobilePanels.length}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
+        </div>
+        <div className="hidden md:block absolute inset-0">
+          {desktopPanels.map((p, i) => (
+            <ChapterPanel
+              key={i}
+              img={p.img}
+              word={p.word}
+              copy={p.copy}
+              index={i}
+              count={desktopPanels.length}
+              scrollYProgress={scrollYProgress}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

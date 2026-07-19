@@ -32,13 +32,16 @@ export const IMAGES = {
   bubbleCoffee: "/pictures-events/bubble-coffee.webp",
   bubbleGiraffe: "/pictures-events/bubble-giraffe.webp",
 
-  // CityToWild scroll chapters: distinct mobile/desktop crops per chapter
+  // CityToWild scroll chapters: mobile keeps its own City/Coffee/Falls/Wild story
   chapterCityMobile: "/pictures-events/chapter-city-mobile.webp",
-  chapterCityDesktop: "/pictures-events/chapter-city-desktop.webp",
   chapterCoffeeMobile: "/pictures-events/chapter-coffee-mobile.webp",
-  chapterCoffeeDesktop: "/pictures-events/chapter-coffee-desktop.webp",
   chapterFallsMobile: "/pictures-events/chapter-falls-mobile.webp",
-  chapterFallsDesktop: "/pictures-events/chapter-falls-desktop.webp",
   chapterWildMobile: "/pictures-events/chapter-wild-mobile.webp",
-  chapterWildDesktop: "/pictures-events/chapter-wild-desktop.webp",
+
+  // CityToWild desktop: separate all-wildlife sequence
+  wildFamily: "/pictures-events/wild-family.webp",
+  wildTower: "/pictures-events/wild-tower.webp",
+  wildFlamingos: "/pictures-events/wild-flamingos.webp",
+  wildPlay: "/pictures-events/wild-play.webp",
+  wildCoast: "/pictures-events/wild-coast.webp",
 };
