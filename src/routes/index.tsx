@@ -204,6 +204,11 @@ function Intro() {
     <section className="py-16 md:py-40 bg-[color:var(--kilimanjaro-snow)]">
       <div className="container-lodge grid gap-16 md:grid-cols-12 items-center">
         <div className="md:col-span-7">
+          <Reveal className="md:hidden relative mb-8 aspect-[16/10] rounded-2xl overflow-hidden img-treat">
+            <img src={IMAGES.introCity} alt="Roadside market on the way into Arusha" className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+            <span className="absolute bottom-4 left-5 font-display italic text-white text-lg">~ Karibu ~</span>
+          </Reveal>
           <p className="eyebrow">Our name, our promise</p>
           <SplitHeading
             className="display-section mt-4"

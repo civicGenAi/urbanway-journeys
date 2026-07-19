@@ -24,4 +24,7 @@ export const IMAGES = {
   guests: img("photo-1523805009345-7448845a9e53", 1400),
   landscape1: img("photo-1547471080-7cc2caa01a7e", 1200),
   landscape2: img("photo-1516426122078-c23e76319801", 1200),
+
+  // Real local photos (processed from src/assets/pictures-events)
+  introCity: "/pictures-events/intro-city.webp",
 };
