@@ -199,16 +199,74 @@ function Hero() {
   );
 }
 
+function FloatingBubble({
+  src,
+  alt,
+  className,
+  duration,
+  delay,
+}: {
+  src: string;
+  alt: string;
+  className: string;
+  duration: number;
+  delay: number;
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.6 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={`absolute ${className}`}
+    >
+      <motion.div
+        animate={{ y: [0, -14, 0] }}
+        transition={{ duration, repeat: Infinity, ease: "easeInOut", delay }}
+        className="h-full w-full rounded-full overflow-hidden border-2 border-white shadow-[0_12px_30px_rgba(23,24,26,0.18)]"
+      >
+        <img src={src} alt={alt} className="h-full w-full object-cover" />
+      </motion.div>
+    </motion.div>
+  );
+}
+
 function Intro() {
   return (
     <section className="py-16 md:py-40 bg-[color:var(--kilimanjaro-snow)]">
       <div className="container-lodge grid gap-16 md:grid-cols-12 items-center">
         <div className="md:col-span-7">
-          <Reveal className="md:hidden relative mb-8 aspect-[16/10] rounded-2xl overflow-hidden img-treat">
-            <img src={IMAGES.introCity} alt="Roadside market on the way into Arusha" className="h-full w-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-            <span className="absolute bottom-4 left-5 font-display italic text-white text-lg">~ Karibu ~</span>
-          </Reveal>
+          <div className="md:hidden relative h-64 mb-6">
+            <FloatingBubble
+              src={IMAGES.introCity}
+              alt="Roadside market on the way into Arusha"
+              className="h-28 w-28 left-0 top-0"
+              duration={4.2}
+              delay={0}
+            />
+            <FloatingBubble
+              src={IMAGES.bubbleAdventure}
+              alt="Guest swinging over the water at Chemka"
+              className="h-20 w-20 right-[6%] top-8"
+              duration={3.6}
+              delay={0.15}
+            />
+            <FloatingBubble
+              src={IMAGES.bubbleWaterfall}
+              alt="Waterfall in the rainforest near Materuni"
+              className="h-24 w-24 left-[32%] bottom-0"
+              duration={4.8}
+              delay={0.3}
+            />
+            <FloatingBubble
+              src={IMAGES.bubbleWildlife}
+              alt="Wildlife on the Tanzanian savanna"
+              className="h-16 w-16 right-2 bottom-10"
+              duration={3.9}
+              delay={0.45}
+            />
+          </div>
+          <p className="md:hidden text-center font-display italic text-[color:var(--trail-green)] text-lg mb-8">~ Karibu ~</p>
           <p className="eyebrow">Our name, our promise</p>
           <SplitHeading
             className="display-section mt-4"
@@ -236,7 +294,7 @@ function Intro() {
             />
             <div className="absolute inset-8 rounded-full border border-[color:var(--forest-deep)]/20" />
             <div className="absolute inset-16 rounded-full overflow-hidden img-treat">
-              <img src={IMAGES.city} alt="Arusha city street at golden hour" className="h-full w-full object-cover" />
+              <img src={IMAGES.introCity} alt="Roadside market on the way into Arusha" className="h-full w-full object-cover" />
             </div>
             <span
               aria-hidden

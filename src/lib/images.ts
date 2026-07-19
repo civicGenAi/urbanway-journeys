@@ -27,4 +27,7 @@ export const IMAGES = {
 
   // Real local photos (processed from src/assets/pictures-events)
   introCity: "/pictures-events/intro-city.webp",
+  bubbleAdventure: "/pictures-events/bubble-adventure.webp",
+  bubbleWaterfall: "/pictures-events/bubble-waterfall.webp",
+  bubbleWildlife: "/pictures-events/bubble-wildlife.webp",
 };
