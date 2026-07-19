@@ -29,5 +29,6 @@ export const IMAGES = {
   introCity: "/pictures-events/intro-city.webp",
   bubbleAdventure: "/pictures-events/bubble-adventure.webp",
   bubbleWaterfall: "/pictures-events/bubble-waterfall.webp",
-  bubbleWildlife: "/pictures-events/bubble-wildlife.webp",
+  bubbleCoffee: "/pictures-events/bubble-coffee.webp",
+  bubbleGiraffe: "/pictures-events/bubble-giraffe.webp",
 };

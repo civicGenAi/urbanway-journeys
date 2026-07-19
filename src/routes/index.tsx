@@ -238,8 +238,8 @@ function Intro() {
         <div className="md:col-span-7">
           <div className="md:hidden relative h-64 mb-6">
             <FloatingBubble
-              src={IMAGES.introCity}
-              alt="Roadside market on the way into Arusha"
+              src={IMAGES.bubbleCoffee}
+              alt="Ripening coffee cherries on a Materuni coffee farm"
               className="h-28 w-28 left-0 top-0"
               duration={4.2}
               delay={0}
@@ -259,8 +259,8 @@ function Intro() {
               delay={0.3}
             />
             <FloatingBubble
-              src={IMAGES.bubbleWildlife}
-              alt="Wildlife on the Tanzanian savanna"
+              src={IMAGES.bubbleGiraffe}
+              alt="Guest with giraffes on the Serengeti plains"
               className="h-16 w-16 right-2 bottom-10"
               duration={3.9}
               delay={0.45}
