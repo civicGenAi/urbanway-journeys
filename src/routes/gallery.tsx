@@ -128,7 +128,11 @@ function GalleryHeadline() {
   return (
     <AnimatePresence mode="wait">
       <motion.div key={i} exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-        <SplitHeading as="h1" className="display-hero mt-3 !text-white" text={GALLERY_HEADLINES[i]} />
+        <SplitHeading
+          as="h1"
+          className="mt-3 !text-white font-display font-medium leading-[1.02] text-[clamp(2.4rem,5.5vw,4.75rem)] [text-shadow:0_4px_30px_rgba(0,0,0,0.45)]"
+          text={GALLERY_HEADLINES[i]}
+        />
       </motion.div>
     </AnimatePresence>
   );
@@ -257,7 +261,7 @@ function Gallery() {
 
   return (
     <>
-      <section className="relative h-[60vh] min-h-[440px] overflow-hidden text-white">
+      <section className="relative h-[70vh] min-h-[560px] overflow-hidden text-white">
         {/* True landscape source (4232x2821) -- plain cover looks sharp at any width, no contain/blur workaround needed */}
         <img
           src={IMAGES.galleryHero}
@@ -265,9 +269,10 @@ function Gallery() {
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-[color:var(--forest-deep)]/80" />
+        {/* Light touch: keeps the text legible without drowning out the photo's colour */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
         <div className="relative container-lodge h-full flex flex-col justify-end pb-16 pt-32">
-          <p className="eyebrow !text-white/80">Field notebook</p>
+          <p className="eyebrow !text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">Field notebook</p>
           <GalleryHeadline />
         </div>
       </section>
