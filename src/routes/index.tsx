@@ -220,7 +220,7 @@ function Intro() {
             </Link>
           </Reveal>
         </div>
-        <div className="md:col-span-5">
+        <div className="hidden md:block md:col-span-5">
           <div className="relative aspect-square">
             <motion.div
               initial={{ opacity: 0, scale: 0.92 }}
@@ -231,7 +231,7 @@ function Intro() {
             />
             <div className="absolute inset-8 rounded-full border border-[color:var(--forest-deep)]/20" />
             <div className="absolute inset-16 rounded-full overflow-hidden img-treat">
-              <img src={IMAGES.acacia} alt="Acacia tree at dawn in Tanzania" />
+              <img src={IMAGES.city} alt="Arusha city street at golden hour" className="h-full w-full object-cover" />
             </div>
             <span
               aria-hidden
