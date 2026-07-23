@@ -1,10 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useScroll, useTransform, useInView, type MotionValue } from "framer-motion";
-import { ArrowUpRight, MessageCircle, Star } from "lucide-react";
+import { ArrowUpRight, MessageCircle, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { IMAGES } from "../lib/images";
 import { Reveal, RevealStagger, RevealChild, SplitHeading } from "../components/Reveal";
 import { JourneyRoad } from "../components/JourneyRoad";
+import { CATEGORIES, tripsInCategory, formatUsd, type Category } from "../lib/trips";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -404,63 +405,107 @@ function CityToWild() {
   );
 }
 
-function FeaturedServices() {
-  const services: {
-    title: string;
-    copy: string;
-    img: string;
-    slug: "wildlife-safaris" | "airport-transfers" | "day-trips";
-  }[] = [
-    { title: "Wildlife Safaris", copy: "Serengeti, Ngorongoro, Tarangire. Shared or private, unhurried days.", img: IMAGES.lion, slug: "wildlife-safaris" },
-    { title: "Airport Transfers", copy: "JRO to Arusha and beyond. On time, air-conditioned, tracked.", img: IMAGES.quoteVipTransport, slug: "airport-transfers" },
-    { title: "Day Trips & Cultural Tours", copy: "Hot springs, waterfalls, wildlife encounters, a city market walk.", img: IMAGES.galChemka1, slug: "day-trips" },
-  ];
+function TripRow({ category }: { category: Category }) {
+  const trips = tripsInCategory(category.slug);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  function scrollByCards(dir: 1 | -1) {
+    const el = scrollRef.current;
+    if (!el) return;
+    const card = el.querySelector<HTMLElement>("[data-card]");
+    const amount = card ? card.offsetWidth + 20 : 320;
+    el.scrollBy({ left: amount * dir, behavior: "smooth" });
+  }
+
   return (
-    <section className="py-16 md:py-40 bg-[color:var(--savanna-sand)]">
+    <Reveal className="py-10 md:py-14 border-t border-black/8 first:border-t-0 first:pt-0">
+      <div className="flex items-end justify-between gap-4 mb-6 md:mb-8">
+        <div>
+          <p className="eyebrow">{category.eyebrow}</p>
+          <h3 className="font-display text-2xl md:text-3xl mt-2">{category.title}</h3>
+        </div>
+        <div className="hidden md:flex items-center gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={() => scrollByCards(-1)}
+            aria-label="Scroll left"
+            className="h-10 w-10 rounded-full border border-black/15 flex items-center justify-center hover:bg-[color:var(--forest-deep)] hover:text-white hover:border-transparent transition-colors"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollByCards(1)}
+            aria-label="Scroll right"
+            className="h-10 w-10 rounded-full border border-black/15 flex items-center justify-center hover:bg-[color:var(--forest-deep)] hover:text-white hover:border-transparent transition-colors"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+          <Link
+            to="/services/$category"
+            params={{ category: category.slug }}
+            className="ml-2 link-slide text-sm font-semibold text-[color:var(--forest-deep)] whitespace-nowrap"
+          >
+            See all →
+          </Link>
+        </div>
+      </div>
+
+      <div
+        ref={scrollRef}
+        className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-2 -mx-[clamp(1.25rem,4vw,3rem)] px-[clamp(1.25rem,4vw,3rem)]"
+      >
+        {trips.map((t) => (
+          <Link
+            key={t.slug}
+            to="/trips/$slug"
+            params={{ slug: t.slug }}
+            data-card
+            data-cursor="View"
+            className="group shrink-0 w-[78%] sm:w-[46%] md:w-[31%] lg:w-[23%] snap-start"
+          >
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden img-treat">
+              <img src={t.images[0]} alt={t.title} />
+            </div>
+            <h4 className="font-display text-lg mt-4 link-slide inline-block">{t.title}</h4>
+            <p className="text-sm text-[color:var(--charcoal)]/60 mt-1">{t.location}</p>
+            <p className="mt-2 font-display text-xl">
+              {formatUsd(t.pricePerPerson)}{" "}
+              <span className="text-sm font-sans text-[color:var(--charcoal)]/50">
+                {category.slug === "airport-transfers" ? "per vehicle" : "shared pp"}
+              </span>
+            </p>
+          </Link>
+        ))}
+        <Link
+          to="/services/$category"
+          params={{ category: category.slug }}
+          data-cursor="View"
+          className="shrink-0 w-[78%] sm:w-[46%] md:w-[31%] lg:w-[23%] snap-start rounded-2xl border-2 border-dashed border-black/15 flex flex-col items-center justify-center gap-3 aspect-[4/3] text-[color:var(--forest-deep)] hover:border-[color:var(--forest-deep)] hover:bg-[color:var(--forest-deep)]/5 transition-colors"
+        >
+          <ArrowUpRight className="h-6 w-6" />
+          <span className="font-semibold text-sm text-center px-6">See all {category.title}</span>
+        </Link>
+      </div>
+    </Reveal>
+  );
+}
+
+function FeaturedServices() {
+  return (
+    <section className="py-16 md:py-32 bg-[color:var(--savanna-sand)]">
       <div className="container-lodge">
-        <div className="flex flex-wrap items-end justify-between gap-6 mb-16">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <p className="eyebrow">What we do</p>
             <SplitHeading className="display-section mt-3 max-w-2xl" text="Journeys made for you, guided by locals" />
           </div>
           <Link to="/services" className="link-slide text-[color:var(--forest-deep)] font-semibold">All services →</Link>
         </div>
-        <RevealStagger className="grid gap-6 md:grid-cols-3">
-          {services.map((s, i) => (
-            <RevealChild key={i} className="group relative overflow-hidden rounded-2xl bg-white" >
-              <Link
-                to="/services/$category"
-                params={{ category: s.slug }}
-                className="block aspect-[16/10] img-treat"
-                data-cursor="View"
-              >
-                <img src={s.img} alt={s.title} />
-              </Link>
-              <div className="p-8 flex items-start justify-between gap-6">
-                <div>
-                  <h3 className="font-display text-3xl">
-                    <Link
-                      to="/services/$category"
-                      params={{ category: s.slug }}
-                      className="link-slide"
-                    >
-                      {s.title}
-                    </Link>
-                  </h3>
-                  <p className="mt-3 text-[color:var(--charcoal)]/70 max-w-sm">{s.copy}</p>
-                </div>
-                <Link
-                  to="/services/$category"
-                  params={{ category: s.slug }}
-                  aria-label={`Explore ${s.title}`}
-                  className="mt-2 h-12 w-12 shrink-0 rounded-full bg-[color:var(--forest-deep)] text-white flex items-center justify-center transition-transform duration-500 group-hover:rotate-45"
-                >
-                  <ArrowUpRight className="h-5 w-5" />
-                </Link>
-              </div>
-            </RevealChild>
-          ))}
-        </RevealStagger>
+
+        {CATEGORIES.map((c) => (
+          <TripRow key={c.slug} category={c} />
+        ))}
       </div>
     </section>
   );

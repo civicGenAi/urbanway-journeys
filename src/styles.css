@@ -215,6 +215,14 @@
 }
 
 /* Image wrapper: warm-green grade + scale on hover */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @utility img-treat {
   overflow: hidden;
   position: relative;
