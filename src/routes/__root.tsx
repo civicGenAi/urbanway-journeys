@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CustomCursor } from "../components/CustomCursor";
+import { FloatingBookButton } from "../components/FloatingBookButton";
 
 function NotFoundComponent() {
   return (
@@ -70,7 +71,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "UrbanWay Tours & Safari offers Serengeti and Kilimanjaro safaris, JRO airport transfers, city tours and car hire across Tanzania.",
+          "UrbanWay Tours & Safari offers Serengeti and Ngorongoro safaris, JRO airport transfers, city tours and wildlife encounters across Tanzania.",
       },
       { name: "author", content: "UrbanWay Tours & Safari" },
       { property: "og:site_name", content: "UrbanWay Tours & Safari" },
@@ -139,6 +140,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <Footer />
+      <FloatingBookButton />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );

@@ -45,6 +45,42 @@ export const IMAGES = {
   wildPlay: "/pictures-events/wild-play.webp",
   wildCoast: "/pictures-events/wild-coast.webp",
 
+  // Trip catalog: default fallback photo for trips without a dedicated pool
+  cheetahDefault: "/pictures-events/cheetah-default.webp",
+
+  // Town Tour trip photos (Arusha central market)
+  townTour1: "/pictures-events/town-tour-1.webp",
+  townTour2: "/pictures-events/town-tour-2.webp",
+  townTour3: "/pictures-events/town-tour-3.webp",
+
+  // Real zebra herd photo (IMAGES.zebra is a mislabeled lion, see reviews.tsx)
+  zebraHerd: "/pictures-events/zebra-herd.webp",
+
+  // Real park photos for the standalone wildlife safari trips
+  ngorongoro1: "/pictures-events/ngorongoro-1.webp",
+  ngorongoro2: "/pictures-events/ngorongoro-2.webp",
+  ngorongoro3: "/pictures-events/ngorongoro-3.webp",
+  tarangire1: "/pictures-events/tarangire-1.webp",
+  tarangire2: "/pictures-events/tarangire-2.webp",
+  tarangire3: "/pictures-events/tarangire-3.webp",
+  manyara1: "/pictures-events/manyara-1.webp",
+  manyara2: "/pictures-events/manyara-2.webp",
+  manyara3: "/pictures-events/manyara-3.webp",
+  serengeti1: "/pictures-events/serengeti-1.webp",
+  serengeti2: "/pictures-events/serengeti-2.webp",
+  serengeti3: "/pictures-events/serengeti-3.webp",
+
+  // Airport transfer trip photos
+  kiliToArusha: "/pictures-events/kili-to-arusha.webp",
+  arushaToKili: "/pictures-events/arusha-to-kili.webp",
+
+  // Custom-quote services on /services (City Tours, Private/Hotel Transfers, Custom Packages)
+  quoteCityTours: "/pictures-events/quote-city-tours.webp",
+  quotePrivateTransfers: "/pictures-events/quote-private-transfers.webp",
+  quoteHotelTransfers: "/pictures-events/quote-hotel-transfers.webp",
+  quoteCustomPackages: "/pictures-events/quote-custom-packages.webp",
+  quoteVipTransport: "/pictures-events/quote-vip-transport.webp",
+
   // Gallery page hero + book-chapter rotating photo pools
   galleryHero: "/pictures-events/gallery-hero.webp",
   galChemka1: "/pictures-events/gal-chemka-1.webp",

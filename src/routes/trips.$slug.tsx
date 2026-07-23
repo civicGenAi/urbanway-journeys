@@ -121,6 +121,12 @@ function AccordionStep({
 function TripPage() {
   const { trip, category } = Route.useLoaderData();
   const [activeImg, setActiveImg] = useState(0);
+  const [priceMode, setPriceMode] = useState<"shared" | "private">("shared");
+  const hasPrivateRate = trip.privatePricePerPerson !== trip.pricePerPerson;
+  const activePricePerPerson =
+    priceMode === "private" && hasPrivateRate
+      ? trip.privatePricePerPerson
+      : trip.pricePerPerson;
   const [confirmation, setConfirmation] = useState<null | {
     ref: string;
     name: string;
@@ -208,17 +214,42 @@ function TripPage() {
 
             <div className="mt-8 p-6 rounded-2xl bg-white shadow-[0_20px_60px_rgba(23,24,26,0.06)]">
               <p className="eyebrow">Starting from</p>
-              <div className="mt-2 flex items-baseline gap-3 flex-wrap">
+              {hasPrivateRate && (
+                <div className="mt-3 inline-flex rounded-full border border-black/10 p-1">
+                  {(["shared", "private"] as const).map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => setPriceMode(m)}
+                      className={`px-4 py-1.5 rounded-full text-sm font-semibold capitalize transition-colors duration-300 ${
+                        priceMode === m
+                          ? "bg-[color:var(--trail-green)] text-white"
+                          : "text-[color:var(--charcoal)]/60"
+                      }`}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div className="mt-3 flex items-baseline gap-3 flex-wrap">
                 <span className="font-display text-4xl">
-                  {formatUsd(trip.pricePerPerson)}
+                  {formatUsd(activePricePerPerson)}
                 </span>
                 <span className="text-[color:var(--charcoal)]/60">
                   per adult
                 </span>
               </div>
               <p className="text-sm text-[color:var(--charcoal)]/60 mt-1">
-                {formatTzs(trip.pricePerPerson)}
+                {formatTzs(activePricePerPerson)}
               </p>
+              {hasPrivateRate && (
+                <p className="text-xs text-[color:var(--charcoal)]/50 mt-1">
+                  {priceMode === "shared"
+                    ? "Shared group departure."
+                    : "Private vehicle, just your group."}
+                </p>
+              )}
               {trip.priceNote && (
                 <p className="mt-3 text-xs text-[color:var(--charcoal)]/60">
                   {trip.priceNote}
@@ -308,7 +339,8 @@ function TripPage() {
             <BookingForm
               tripSlug={trip.slug}
               tripTitle={trip.title}
-              pricePerPerson={trip.pricePerPerson}
+              pricePerPerson={activePricePerPerson}
+              priceMode={hasPrivateRate ? priceMode : undefined}
               onConfirmed={(c) => setConfirmation(c)}
             />
           </div>
@@ -335,11 +367,13 @@ function BookingForm({
   tripSlug,
   tripTitle,
   pricePerPerson,
+  priceMode,
   onConfirmed,
 }: {
   tripSlug: string;
   tripTitle: string;
   pricePerPerson: number;
+  priceMode?: "shared" | "private";
   onConfirmed: (c: {
     ref: string;
     name: string;
@@ -433,7 +467,7 @@ function BookingForm({
 
     if (mode === "negotiate") {
       const msg =
-        `Hello UrbanWay! I'd like to negotiate a booking for "${tripTitle}".\n` +
+        `Hello UrbanWay! I'd like to negotiate a booking for "${tripTitle}"${priceMode ? ` (${priceMode})` : ""}.\n` +
         `Guests: ${counts.adult} adult, ${counts.youth} youth, ${counts.child} child, ${counts.infant} infant.\n` +
         (date ? `Preferred date: ${date}.\n` : "") +
         (special ? `Notes: ${special.slice(0, 200)}\n` : "") +

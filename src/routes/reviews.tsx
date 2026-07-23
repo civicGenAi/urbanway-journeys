@@ -23,7 +23,7 @@ const REVIEWS = [
   { name: "David & Sara", country: "🇺🇸", flag: "USA", trip: "Honeymoon package", date: "June 2025", stars: 5, text: "A honeymoon custom trip through Tarangire and Zanzibar. UrbanWay handled surprises we didn't even know to ask about. Faultless." },
   { name: "Ilse", country: "🇳🇱", flag: "Netherlands", trip: "Lake Manyara day", date: "April 2025", stars: 4, text: "Great value day trip, our driver was funny and knowledgeable. Only note is I wish we had one more hour at the tree-climbing lions viewpoint." },
   { name: "Priya", country: "🇬🇧", flag: "UK", trip: "Family safari 10-day", date: "July 2025", stars: 5, text: "Traveling with kids can be stressful. UrbanWay adapted every day to the children's mood, added a pool afternoon we needed, and never made us feel demanding." },
-  { name: "Tom", country: "🇺🇸", flag: "USA", trip: "Car hire", date: "November 2025", stars: 5, text: "Self-drive Land Cruiser for two weeks. Vehicle was newer than our own car at home, and their WhatsApp support answered a border question in three minutes." },
+  { name: "Tom", country: "🇺🇸", flag: "USA", trip: "Napuru Waterfall", date: "November 2025", stars: 5, text: "Quieter than the falls everyone talks about, which is exactly what we wanted. The quad bike ride through the forest trails was the surprise highlight of our whole trip." },
   { name: "Chihiro", country: "🇯🇵", flag: "Japan", trip: "Serengeti balloon", date: "August 2025", stars: 5, text: "Balloon at dawn over Serengeti, breakfast on the plains. UrbanWay coordinated the entire day including a birthday surprise. Karibu indeed." },
 ];
 

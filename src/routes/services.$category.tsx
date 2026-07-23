@@ -139,14 +139,16 @@ function CategoryPage() {
                   <div className="mt-6 pt-6 border-t border-black/8 flex items-end justify-between gap-4">
                     <div>
                       <p className="text-xs uppercase tracking-widest text-[color:var(--charcoal)]/50">
-                        From
+                        Shared from
                       </p>
                       <p className="font-display text-2xl mt-1">
                         {formatUsd(t.pricePerPerson)}
                       </p>
-                      <p className="text-xs text-[color:var(--charcoal)]/60">
-                        {formatTzs(t.pricePerPerson)}
-                      </p>
+                      {t.privatePricePerPerson !== t.pricePerPerson && (
+                        <p className="text-xs text-[color:var(--charcoal)]/60">
+                          Private from {formatUsd(t.privatePricePerPerson)}
+                        </p>
+                      )}
                     </div>
                     <Link
                       to="/trips/$slug"

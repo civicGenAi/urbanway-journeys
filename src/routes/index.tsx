@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Serengeti and Kilimanjaro safaris, JRO airport transfers, day trips and car hire. Licensed Tanzanian guides. Karibu.",
+          "Serengeti and Kilimanjaro safaris, JRO airport transfers, day trips and wildlife encounters. Licensed Tanzanian guides. Karibu.",
       },
       { property: "og:title", content: "UrbanWay Tours & Safari | Your Gateway to Tanzania" },
       { property: "og:description", content: "From Arusha to the Serengeti. Licensed guides, modern 4x4s, tailor-made journeys." },
@@ -30,8 +30,8 @@ function Home() {
       <JourneyRoad />
       <Hero />
       <Intro />
-      <CityToWild />
       <FeaturedServices />
+      <CityToWild />
       <Marquee />
       <WhyUs />
       <TestimonialsPreview />
@@ -409,12 +409,11 @@ function FeaturedServices() {
     title: string;
     copy: string;
     img: string;
-    slug: "wildlife-safaris" | "airport-transfers" | "day-trips" | "car-hire";
+    slug: "wildlife-safaris" | "airport-transfers" | "day-trips";
   }[] = [
-    { title: "Wildlife Safaris", copy: "Serengeti, Ngorongoro, Tarangire. Private guides, unhurried days.", img: IMAGES.lion, slug: "wildlife-safaris" },
-    { title: "Airport Transfers", copy: "JRO to Arusha and beyond. On time, air-conditioned, tracked.", img: IMAGES.fleet, slug: "airport-transfers" },
-    { title: "Day Trips & Cultural Tours", copy: "Materuni waterfalls, coffee farms, Maasai villages.", img: IMAGES.masai, slug: "day-trips" },
-    { title: "Car Hire", copy: "Modern Land Cruisers with a driver, or self-drive with support.", img: IMAGES.vehicle, slug: "car-hire" },
+    { title: "Wildlife Safaris", copy: "Serengeti, Ngorongoro, Tarangire. Shared or private, unhurried days.", img: IMAGES.lion, slug: "wildlife-safaris" },
+    { title: "Airport Transfers", copy: "JRO to Arusha and beyond. On time, air-conditioned, tracked.", img: IMAGES.quoteVipTransport, slug: "airport-transfers" },
+    { title: "Day Trips & Cultural Tours", copy: "Hot springs, waterfalls, wildlife encounters, a city market walk.", img: IMAGES.galChemka1, slug: "day-trips" },
   ];
   return (
     <section className="py-16 md:py-40 bg-[color:var(--savanna-sand)]">
@@ -426,7 +425,7 @@ function FeaturedServices() {
           </div>
           <Link to="/services" className="link-slide text-[color:var(--forest-deep)] font-semibold">All services →</Link>
         </div>
-        <RevealStagger className="grid gap-6 md:grid-cols-2">
+        <RevealStagger className="grid gap-6 md:grid-cols-3">
           {services.map((s, i) => (
             <RevealChild key={i} className="group relative overflow-hidden rounded-2xl bg-white" >
               <Link

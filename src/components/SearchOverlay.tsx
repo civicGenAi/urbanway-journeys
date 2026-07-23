@@ -48,7 +48,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
             <div className="max-h-[60vh] overflow-y-auto">
               {query.trim() === "" ? (
                 <p className="px-6 py-10 text-center text-sm text-[color:var(--charcoal)]/50">
-                  Try "Serengeti", "car hire", or "airport transfer".
+                  Try "Ngorongoro", "Chemka", or "airport transfer".
                 </p>
               ) : results.length === 0 ? (
                 <p className="px-6 py-10 text-center text-sm text-[color:var(--charcoal)]/50">

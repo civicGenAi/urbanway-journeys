@@ -50,7 +50,6 @@ export function Footer() {
             <li>Wildlife Safaris</li>
             <li>Airport Transfers</li>
             <li>Day Trips & Culture</li>
-            <li>Car Hire</li>
             <li>VIP Transport</li>
           </ul>
         </div>

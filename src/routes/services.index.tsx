@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { CATEGORIES, tripsInCategory, formatUsd, buildWhatsAppUrl } from "../lib/trips";
 
 const SERVICES_HEADLINES = [
-  "Nine ways to experience Tanzania",
+  "Eight ways to experience Tanzania",
   "Safaris, transfers, and custom trips",
   "One local team, every journey",
   "Tell us where you want to go",
@@ -19,41 +19,41 @@ const QUOTE_SERVICES: { title: string; blurb: string; inc: string[]; img: string
     title: "City Tours",
     blurb: "Half day and full day tours of Arusha, Moshi and Dar. Markets, cafes, viewpoints.",
     inc: ["Local historian guide", "Curated food stops", "Fully insured transport"],
-    img: IMAGES.city,
+    img: IMAGES.quoteCityTours,
   },
   {
     title: "Private Transfers",
     blurb: "Point to point private transfers between towns, lodges and parks anywhere in Tanzania.",
     inc: ["Door to door service", "Flexible routing", "Multi-lingual drivers"],
-    img: IMAGES.road,
+    img: IMAGES.quotePrivateTransfers,
   },
   {
     title: "Hotel Transfers",
     blurb: "Inter-lodge transfers on safari routes, coordinated with your itinerary and check-in times.",
     inc: ["Luggage handling", "Chilled refreshments", "Photo stops on request"],
-    img: IMAGES.tarangire,
+    img: IMAGES.quoteHotelTransfers,
   },
   {
     title: "Corporate & VIP Transportation",
     blurb: "Executive transport for conferences, delegations and film crews across East Africa.",
     inc: ["Fleet coordinator", "NDA available", "Backup vehicles on standby"],
-    img: IMAGES.ngorongoro,
+    img: IMAGES.quoteVipTransport,
   },
   {
     title: "Customized Travel Packages",
     blurb: "Honeymoons, family reunions, photography workshops. We build the whole journey with you.",
     inc: ["Dedicated trip designer", "Lodge and camp partnerships", "Flexible payment plans"],
-    img: IMAGES.zanzibar,
+    img: IMAGES.quoteCustomPackages,
   },
 ];
 
 export const Route = createFileRoute("/services/")({
   head: () => ({
     meta: [
-      { title: "Safari Tours, Airport Transfers & Car Hire in Tanzania | UrbanWay" },
-      { name: "description", content: "Nine ways to experience Tanzania: safaris, transfers, city tours, car hire and custom packages, led by Arusha locals." },
+      { title: "Safari Tours, Airport Transfers & Day Trips in Tanzania | UrbanWay" },
+      { name: "description", content: "Eight ways to experience Tanzania: safaris, transfers, city tours and custom packages, led by Arusha locals." },
       { property: "og:title", content: "Safari Tours & Transfers in Tanzania | UrbanWay" },
-      { property: "og:description", content: "Nine services, one trusted local team. Serengeti safaris to JRO transfers." },
+      { property: "og:description", content: "Eight services, one trusted local team. Serengeti safaris to JRO transfers." },
       { property: "og:url", content: "/services" },
     ],
     links: [{ rel: "canonical", href: "/services" }],
